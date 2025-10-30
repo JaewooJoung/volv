@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Quality Metrics Summary</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            background: white;
+            padding: 60px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .metric-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+        
+        .metric-header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px 60px;
+            font-size: 36px;
+            font-weight: 600;
+            border-radius: 8px;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(44, 62, 80, 0.3);
+        }
+        
+        .metric-value {
+            font-size: 180px;
+            font-weight: bold;
+            color: #2c3e50;
+            line-height: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .metric-value.hatched {
+            background: repeating-linear-gradient(
+                45deg,
+                #2c3e50,
+                #2c3e50 10px,
+                transparent 10px,
+                transparent 20px
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .trend-icon {
+            width: 180px;
+            height: 180px;
+            border: 8px solid #27ae60;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            box-shadow: 0 8px 20px rgba(39, 174, 96, 0.2);
+        }
+        
+        .trend-icon.up {
+            border-color: #e74c3c;
+        }
+        
+        .trend-icon.stable {
+            border-color: #f39c12;
+        }
+        
+        .arrow-down {
+            width: 0;
+            height: 0;
+            border-left: 60px solid transparent;
+            border-right: 60px solid transparent;
+            border-top: 90px solid #27ae60;
+            position: relative;
+        }
+        
+        .arrow-down::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 80px;
+            background: #27ae60;
+            left: -20px;
+            top: -140px;
+        }
+        
+        .arrow-up {
+            width: 0;
+            height: 0;
+            border-left: 60px solid transparent;
+            border-right: 60px solid transparent;
+            border-bottom: 90px solid #e74c3c;
+            position: relative;
+        }
+        
+        .arrow-up::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 80px;
+            background: #e74c3c;
+            left: -20px;
+            top: 10px;
+        }
+        
+        .arrow-right {
+            width: 0;
+            height: 0;
+            border-top: 60px solid transparent;
+            border-bottom: 60px solid transparent;
+            border-left: 90px solid #f39c12;
+            position: relative;
+        }
+        
+        .arrow-right::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 40px;
+            background: #f39c12;
+            top: -20px;
+            left: -140px;
+        }
+        
+        .metric-description {
+            font-size: 28px;
+            color: #34495e;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 42px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            font-size: 18px;
+            color: #7f8c8d;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 1200px) {
+            .metrics-grid {
+                gap: 30px;
+                padding: 40px;
+            }
+            
+            .metric-value {
+                font-size: 140px;
+            }
+            
+            .metric-header {
+                font-size: 28px;
+                padding: 15px 40px;
+            }
+            
+            .trend-icon {
+                width: 140px;
+                height: 140px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                padding: 30px;
+            }
+            
+            .metric-value {
+                font-size: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Quality Metrics Overview</h1>
+            <div class="subtitle">Total Projects: <span id="totalProjects">30</span></div>
+        </div>
+        
+        <div class="metrics-grid">
+            <!-- PPM Metric -->
+            <div class="metric-box">
+                <div class="metric-header">PPM &gt;50</div>
+                <div class="metric-value hatched" id="ppmValue">0</div>
+                <div class="metric-description">Out of <span id="ppmTotal">30</span> projects</div>
+            </div>
+            
+            <!-- QPM Metric -->
+            <div class="metric-box">
+                <div class="metric-header">QPM &gt;50</div>
+                <div class="metric-value" id="qpmValue">1</div>
+                <div class="metric-description">Out of <span id="qpmTotal">30</span> projects</div>
+            </div>
+            
+            <!-- Trend Metric -->
+            <div class="metric-box">
+                <div class="metric-header">Trend</div>
+                <div class="trend-icon" id="trendIcon">
+                    <div class="arrow-down"></div>
+                </div>
+                <div class="metric-description" id="trendDescription">Risk down</div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            Last Updated: <span id="lastUpdate"></span>
+        </div>
+    </div>
+    
+    <script>
+        // Sample data - Replace with your actual data
+        const qualityData = {
+            totalProjects: 30,
+            ppmAbove50: 0,
+            qpmAbove50: 1,
+            overallTrend: 'down' // 'down', 'up', or 'stable'
+        };
+        
+        // Initialize the page
+        function initializePage() {
+            updateMetrics(qualityData);
+            updateLastUpdate();
+        }
+        
+        // Update metrics on the page
+        function updateMetrics(data) {
+            document.getElementById('totalProjects').textContent = data.totalProjects;
+            document.getElementById('ppmValue').textContent = data.ppmAbove50;
+            document.getElementById('ppmTotal').textContent = data.totalProjects;
+            document.getElementById('qpmValue').textContent = data.qpmAbove50;
+            document.getElementById('qpmTotal').textContent = data.totalProjects;
+            
+            // Update trend
+            updateTrend(data.overallTrend);
+        }
+        
+        // Update trend icon and description
+        function updateTrend(trend) {
+            const trendIcon = document.getElementById('trendIcon');
+            const trendDescription = document.getElementById('trendDescription');
+            
+            // Clear existing classes and content
+            trendIcon.className = 'trend-icon';
+            trendIcon.innerHTML = '';
+            
+            if (trend === 'down') {
+                trendIcon.innerHTML = '<div class="arrow-down"></div>';
+                trendDescription.textContent = 'Risk down';
+                trendDescription.style.color = '#27ae60';
+            } else if (trend === 'up') {
+                trendIcon.classList.add('up');
+                trendIcon.innerHTML = '<div class="arrow-up"></div>';
+                trendDescription.textContent = 'Risk up';
+                trendDescription.style.color = '#e74c3c';
+            } else {
+                trendIcon.classList.add('stable');
+                trendIcon.innerHTML = '<div class="arrow-right"></div>';
+                trendDescription.textContent = 'Risk stable';
+                trendDescription.style.color = '#f39c12';
+            }
+        }
+        
+        // Update last update timestamp
+        function updateLastUpdate() {
+            const now = new Date();
+            const formatted = now.toLocaleString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            document.getElementById('lastUpdate').textContent = formatted;
+        }
+        
+        // Function to fetch data from API (example)
+        async function fetchQualityData() {
+            try {
+                // Replace with your actual API endpoint
+                // const response = await fetch('/api/quality-metrics');
+                // const data = await response.json();
+                // updateMetrics(data);
+                
+                // For now, using sample data
+                console.log('Using sample data');
+            } catch (error) {
+                console.error('Error fetching quality data:', error);
+            }
+        }
+        
+        // Function to calculate metrics from supplier data
+        function calculateMetricsFromSuppliers(suppliers) {
+            let ppmCount = 0;
+            let qpmCount = 0;
+            let trendingDown = 0;
+            let trendingUp = 0;
+            
+            suppliers.forEach(supplier => {
+                // Check if latest PPM > 50
+                if (supplier.ppm && supplier.ppm.values.length > 0) {
+                    const latestPPM = supplier.ppm.values[supplier.ppm.values.length - 1];
+                    if (latestPPM > 50) ppmCount++;
+                    
+                    // Calculate trend
+                    if (supplier.ppm.values.length >= 2) {
+                        const current = supplier.ppm.values[supplier.ppm.values.length - 1];
+                        const previous = supplier.ppm.values[supplier.ppm.values.length - 2];
+                        if (current < previous) trendingDown++;
+                        else if (current > previous) trendingUp++;
+                    }
+                }
+                
+                // Check if latest QPM > 50
+                if (supplier.qpm && supplier.qpm.values.length > 0) {
+                    const latestQPM = supplier.qpm.values[supplier.qpm.values.length - 1];
+                    if (latestQPM > 50) qpmCount++;
+                }
+            });
+            
+            // Determine overall trend
+            let overallTrend = 'stable';
+            if (trendingDown > trendingUp) overallTrend = 'down';
+            else if (trendingUp > trendingDown) overallTrend = 'up';
+            
+            return {
+                totalProjects: suppliers.length,
+                ppmAbove50: ppmCount,
+                qpmAbove50: qpmCount,
+                overallTrend: overallTrend
+            };
+        }
+        
+        // Auto-refresh every 5 minutes
+        setInterval(() => {
+            fetchQualityData();
+            updateLastUpdate();
+        }, 300000);
+        
+        // Initialize on page load
+        initializePage();
+    </script>
+</body>
+</html>
