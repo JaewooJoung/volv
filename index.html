@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Supplier Quality Metrics</title>
+    <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 0;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .last-update {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .container {
+            padding: 20px 30px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #2c5f8d 0%, #1e3c72 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px 6px 0 0;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 20px;
+        }
+        
+        .section-content {
+            background: white;
+            padding: 20px;
+            border-radius: 0 0 6px 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .info-card {
+            background: white;
+            border-radius: 6px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .supplier-info {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+        
+        .supplier-logo {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(255,107,107,0.3);
+        }
+        
+        .supplier-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .detail-label {
+            font-size: 11px;
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .detail-value {
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .detail-link {
+            color: #2196F3;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .detail-link:hover {
+            text-decoration: underline;
+        }
+        
+        .audits-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .audit-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+        
+        .audit-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .audit-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .audit-status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        
+        .status-approved {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .status-expired {
+            background: #FFC107;
+            color: #333;
+        }
+        
+        .status-excellent {
+            background: #00BCD4;
+            color: white;
+        }
+        
+        .status-na {
+            background: #9E9E9E;
+            color: white;
+        }
+        
+        .audit-date {
+            font-size: 11px;
+            color: #666;
+        }
+        
+        .metrics-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .metric-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c5f8d;
+        }
+        
+        .metric-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .chart-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .chart-link {
+            color: #2196F3;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .controls {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        select {
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+            background: white;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #2c5f8d 0%, #1e3c72 100%);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(44,95,141,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>Supplier Quality Metrics Dashboard</h1>
+            <div class="last-update" id="lastUpdate">Last Update: Loading...</div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- Supplier Partner Info -->
+        <div class="section-header">Supplier Partner Info</div>
+        <div class="section-content">
+            <div class="supplier-info">
+                <div class="supplier-logo" id="supplierLogo">S</div>
+                <div class="supplier-details">
+                    <div class="detail-item">
+                        <div class="detail-label">PARMA</div>
+                        <div class="detail-value" id="parmaId">92404</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Name</div>
+                        <div class="detail-value" id="supplierName">Stoneridge Electronics AS</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Address</div>
+                        <div class="detail-value" id="supplierAddress">Edvina Jelstads V Trondheim</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Project</div>
+                        <div class="detail-value"><a href="#" class="detail-link" id="projectLink">Link</a></div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Timeplan</div>
+                        <div class="detail-value"><a href="#" class="detail-link" id="timeplanLink">Link</a></div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">APQP</div>
+                        <div class="detail-value" id="apqp">N/A</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">PPAP</div>
+                        <div class="detail-value" id="ppap">AVA</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Audits Section -->
+        <div class="section-header">Audits</div>
+        <div class="section-content">
+            <div class="audits-grid" id="auditsGrid">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Quality Metrics Indices -->
+        <div class="section-header">Quality Metrics</div>
+        <div class="section-content">
+            <div class="metrics-row">
+                <div class="metric-card">
+                    <div class="metric-label">SW Index</div>
+                    <div class="metric-value" id="swIndex">2000</div>
+                    <div class="metric-status status-approved">Approved</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">EE Index</div>
+                    <div class="metric-value" id="eeIndex">2008</div>
+                    <div class="metric-status status-approved">Approved</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">CSR</div>
+                    <div class="metric-value" id="csrIndex">--</div>
+                    <div class="metric-status status-na">N/A</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">SMA</div>
+                    <div class="metric-value" id="smaIndex">2008</div>
+                    <div class="metric-status status-approved">Approved</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">SAQ</div>
+                    <div class="metric-value" id="saqIndex">--</div>
+                    <div class="metric-status status-approved">Approved</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Controls -->
+        <div class="controls">
+            <label style="font-weight: 600; font-size: 13px;">Select Supplier:</label>
+            <select id="supplierSelect">
+                <option value="supplier1">Stoneridge Electronics AS</option>
+                <option value="supplier2">TechParts Manufacturing Ltd</option>
+                <option value="supplier3">Quality Components Inc</option>
+            </select>
+            <button onclick="updateDashboard()">🔄 Refresh Data</button>
+            <button onclick="exportData()">📊 Export Report</button>
+        </div>
+        
+        <!-- Charts Section -->
+        <div class="section-header">Quality Metrics Charts</div>
+        <div class="section-content">
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">QPM (YTD)</div>
+                        <a href="#" class="chart-link">Link</a>
+                    </div>
+                    <div id="qpmChart"></div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">PPM (YTD)</div>
+                        <a href="#" class="chart-link">Link</a>
+                    </div>
+                    <div id="ppmChart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize dashboard
+        function initDashboard() {
+            updateLastUpdate();
+            loadAudits();
+            updateDashboard();
+        }
+        
+        function updateLastUpdate() {
+            const now = new Date();
+            const formatted = now.getFullYear() + '-' + 
+                String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+                String(now.getDate()).padStart(2, '0') + ' ' +
+                String(now.getHours()).padStart(2, '0') + ':' + 
+                String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('lastUpdate').textContent = 'Last Update: ' + formatted;
+        }
+        
+        function loadAudits() {
+            const audits = [
+                { title: 'IATF 16949', status: 'Approved', date: '02/04/2027', statusClass: 'status-approved' },
+                { title: 'ISO 9001', status: 'Approved', date: '02/04/2026', statusClass: 'status-approved' },
+                { title: 'ISO 14001', status: 'Approved', date: '04/28/2026', statusClass: 'status-approved' },
+                { title: 'ISO2700 /TISAX', status: 'Expired', date: '11/01/2025', statusClass: 'status-expired' },
+                { title: 'SEM', status: 'Excellent', date: '2020', statusClass: 'status-excellent' },
+                { title: 'SAQ', status: 'Approved', date: '', statusClass: 'status-approved' }
+            ];
+            
+            const grid = document.getElementById('auditsGrid');
+            grid.innerHTML = '';
+            
+            audits.forEach(audit => {
+                const card = document.createElement('div');
+                card.className = 'audit-card';
+                card.innerHTML = '<div class="audit-title">' + audit.title + '</div>' +
+                    '<div class="audit-status ' + audit.statusClass + '">' + audit.status + '</div>' +
+                    '<div class="audit-date">' + audit.date + '</div>';
+                grid.appendChild(card);
+            });
+        }
+        
+        async function updateDashboard() {
+            try {
+                const response = await fetch('http://localhost:8767/quality-data');
+                const data = await response.json();
+                
+                // Update QPM Chart
+                createQPMChart(data.qpm);
+                
+                // Update PPM Chart
+                createPPMChart(data.ppm);
+                
+                updateLastUpdate();
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+        
+        function createQPMChart(data) {
+            const trace = {
+                x: data.months,
+                y: data.values,
+                type: 'bar',
+                marker: {
+                    color: '#2196F3',
+                    line: {
+                        color: '#1976D2',
+                        width: 1
+                    }
+                }
+            };
+            
+            const annotation = {
+                x: data.months[data.months.length - 1],
+                y: data.values[data.values.length - 1],
+                xref: 'x',
+                yref: 'y',
+                text: 'Sum of QPM by Month',
+                showarrow: true,
+                arrowhead: 2,
+                ax: -40,
+                ay: -40,
+                font: {
+                    size: 11,
+                    color: '#d32f2f'
+                }
+            };
+            
+            const layout = {
+                xaxis: { 
+                    title: 'Month',
+                    tickangle: -45,
+                    tickfont: { size: 10 }
+                },
+                yaxis: { 
+                    title: 'QPM',
+                    rangemode: 'tozero'
+                },
+                margin: { l: 50, r: 20, t: 20, b: 80 },
+                height: 300,
+                annotations: [annotation],
+                plot_bgcolor: '#f8f9fa',
+                paper_bgcolor: 'white'
+            };
+            
+            Plotly.newPlot('qpmChart', [trace], layout, {responsive: true, displayModeBar: false});
+        }
+        
+        function createPPMChart(data) {
+            const trace = {
+                x: data.months,
+                y: data.values,
+                type: 'bar',
+                marker: {
+                    color: '#2196F3',
+                    line: {
+                        color: '#1976D2',
+                        width: 1
+                    }
+                }
+            };
+            
+            const layout = {
+                xaxis: { 
+                    title: 'Month',
+                    tickangle: -45,
+                    tickfont: { size: 10 }
+                },
+                yaxis: { 
+                    title: 'PPM',
+                    rangemode: 'tozero'
+                },
+                margin: { l: 50, r: 20, t: 20, b: 80 },
+                height: 300,
+                plot_bgcolor: '#f8f9fa',
+                paper_bgcolor: 'white'
+            };
+            
+            Plotly.newPlot('ppmChart', [trace], layout, {responsive: true, displayModeBar: false});
+        }
+        
+        function exportData() {
+            alert('Export functionality - This would generate a PDF or Excel report');
+        }
+        
+        // Initialize on load
+        initDashboard();
+    </script>
+</body>
+</html>
