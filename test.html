@@ -252,6 +252,13 @@
             margin-top: 6px;
         }
         
+        .metric-notification {
+            margin-top: 8px;
+            font-size: 10px;
+            color: #f44336;
+            font-weight: 600;
+        }
+        
         .trend-indicators {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -806,6 +813,10 @@
                 return 'status-approved';
             };
             
+            const showEmailNotification = (status) => {
+                return status === 'Not Approved' ? '<div class="metric-notification">📨Email sent</div>' : '';
+            };
+            
             const content = document.getElementById('metricsContent');
             content.innerHTML = `
                 <div class="metrics-row">
@@ -813,26 +824,31 @@
                         <div class="metric-label">SW Index</div>
                         <div class="metric-value">${metrics.swIndex}</div>
                         <div class="metric-status ${getStatusClass(metrics.swStatus)}">${metrics.swStatus}</div>
+                        ${showEmailNotification(metrics.swStatus)}
                     </div>
                     <div class="metric-card">
                         <div class="metric-label">EE Index</div>
                         <div class="metric-value">${metrics.eeIndex}</div>
                         <div class="metric-status ${getStatusClass(metrics.eeStatus)}">${metrics.eeStatus}</div>
+                        ${showEmailNotification(metrics.eeStatus)}
                     </div>
                     <div class="metric-card">
                         <div class="metric-label">CSR</div>
                         <div class="metric-value">${metrics.csr}</div>
                         <div class="metric-status ${getStatusClass(metrics.csrStatus)}">${metrics.csrStatus}</div>
+                        ${showEmailNotification(metrics.csrStatus)}
                     </div>
                     <div class="metric-card">
                         <div class="metric-label">SMA</div>
                         <div class="metric-value">${metrics.sma}</div>
                         <div class="metric-status ${getStatusClass(metrics.smaStatus)}">${metrics.smaStatus}</div>
+                        ${showEmailNotification(metrics.smaStatus)}
                     </div>
                     <div class="metric-card">
                         <div class="metric-label">SAQ</div>
                         <div class="metric-value">${metrics.saq}</div>
                         <div class="metric-status ${getStatusClass(metrics.saqStatus)}">${metrics.saqStatus}</div>
+                        ${showEmailNotification(metrics.saqStatus)}
                     </div>
                 </div>
             `;
