@@ -655,7 +655,7 @@
             if (last <= threshold && current >= threshold) {
                 return {
                     type: 'warning',
-                    message: `⚠️ ${metricType} crossed threshold (${last} → ${current}). Email notification every 2 weeks.`
+                    message: `⚠️ ${metricType} crossed threshold (${last} → ${current}). Email📨 notification every 2 weeks.`
                 };
             }
             
@@ -663,7 +663,7 @@
             if (current >= threshold && trend.direction === 'decreasing') {
                 return {
                     type: 'success',
-                    message: `✓ ${metricType} above threshold but trending down. Notification every 4 weeks.`
+                    message: `✓ ${metricType} above threshold but trending down. Email📨 Notification every 4 weeks.`
                 };
             }
             
@@ -671,7 +671,7 @@
             if (current >= threshold) {
                 return {
                     type: 'warning',
-                    message: `⚠️ ${metricType} remains above threshold (${current}). Monitor closely.`
+                    message: `⚠️ ${metricType} remains above threshold (${current}). Monitor closely. 📨Email sent`
                 };
             }
             
