@@ -1,0 +1,113 @@
+{
+  "id": "supplier2",
+  "parmaId": 91226,
+  "name": "TechParts Manufacturing Ltd",
+  "address": "Industrial Park Rd, Manchester",
+  "logo": "T",
+  "projectLink": "#project-91226",
+  "timeplanLink": "#timeplan-91226",
+  "apqp": "Pending",
+  "ppap": "Not Approved",
+  "audits": [
+    {
+      "title": "IATF 16949",
+      "status": "Expired",
+      "date": "01/15/2024",
+      "statusClass": "status-expired"
+    },
+    {
+      "title": "ISO 9001",
+      "status": "Expired",
+      "date": "03/22/2024",
+      "statusClass": "status-expired"
+    },
+    {
+      "title": "ISO 14001",
+      "status": "Approved",
+      "date": "11/30/2025",
+      "statusClass": "status-approved"
+    },
+    {
+      "title": "ISO2700 /TISAX",
+      "status": "Expired",
+      "date": "06/10/2024",
+      "statusClass": "status-expired"
+    },
+    {
+      "title": "SEM",
+      "status": "N/A",
+      "date": "",
+      "statusClass": "status-na"
+    },
+    {
+      "title": "SAQ",
+      "status": "Pending",
+      "date": "",
+      "statusClass": "status-pending"
+    }
+  ],
+  "metrics": {
+    "swIndex": 1245,
+    "swStatus": "Pending",
+    "eeIndex": 985,
+    "eeStatus": "Not Approved",
+    "csr": "--",
+    "csrStatus": "N/A",
+    "sma": 1156,
+    "smaStatus": "Review",
+    "saq": "--",
+    "saqStatus": "Pending"
+  },
+  "qpm": {
+    "months": [
+      "2025-01",
+      "2025-02",
+      "2025-03",
+      "2025-04",
+      "2025-05",
+      "2025-06",
+      "2025-07",
+      "2025-08",
+      "2025-09",
+      "2025-10"
+    ],
+    "values": [
+      12,
+      18,
+      25,
+      32,
+      45,
+      58,
+      67,
+      78,
+      89,
+      95
+    ]
+  },
+  "ppm": {
+    "months": [
+      "2025-01",
+      "2025-02",
+      "2025-03",
+      "2025-04",
+      "2025-05",
+      "2025-06",
+      "2025-07",
+      "2025-08",
+      "2025-09",
+      "2025-10"
+    ],
+    "values": [
+      450,
+      620,
+      785,
+      920,
+      1150,
+      1340,
+      1580,
+      1720,
+      1890,
+      2050
+    ]
+  }
+}
