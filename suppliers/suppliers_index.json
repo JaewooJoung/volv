@@ -1,0 +1,32 @@
+[
+  {
+    "id": "supplier1",
+    "name": "Stoneridge Electronics AS",
+    "parmaId": 94750,
+    "filename": "supplier_supplier1.json"
+  },
+  {
+    "id": "supplier2",
+    "name": "TechParts Manufacturing Ltd",
+    "parmaId": 91226,
+    "filename": "supplier_supplier2.json"
+  },
+  {
+    "id": "supplier3",
+    "name": "Quality Components Inc",
+    "parmaId": 99262,
+    "filename": "supplier_supplier3.json"
+  },
+  {
+    "id": "supplier4",
+    "name": "Precision Systems GmbH",
+    "parmaId": 96014,
+    "filename": "supplier_supplier4.json"
+  },
+  {
+    "id": "supplier5",
+    "name": "Advanced Automotive Solutions",
+    "parmaId": 91199,
+    "filename": "supplier_supplier5.json"
+  }
+]
