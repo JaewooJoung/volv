@@ -61,10 +61,10 @@
         .metric-value.hatched {
             background: repeating-linear-gradient(
                 45deg,
-                #2c3e50,
-                #2c3e50 10px,
-                transparent 10px,
-                transparent 20px
+                #27ae60,
+                #27ae60 10px,
+                #95a5a6 10px,
+                #95a5a6 20px
             );
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -155,6 +155,15 @@
             font-weight: 500;
         }
         
+        .metric-value.zero {
+            color: #27ae60;
+        }
+        
+        .total-count {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        
         .header {
             text-align: center;
             margin-bottom: 40px;
@@ -167,8 +176,8 @@
         }
         
         .header .subtitle {
-            font-size: 18px;
-            color: #7f8c8d;
+            font-size: 38pt;
+            color: #e74c3c;
         }
         
         .footer {
@@ -225,15 +234,15 @@
             <!-- PPM Metric -->
             <div class="metric-box">
                 <div class="metric-header">PPM &gt;50</div>
-                <div class="metric-value hatched" id="ppmValue">0</div>
-                <div class="metric-description">Out of <span id="ppmTotal">30</span> projects</div>
+                <div class="metric-value hatched zero" id="ppmValue">0</div>
+                <div class="metric-description">Out of <span class="total-count" id="ppmTotal">30</span> projects</div>
             </div>
             
             <!-- QPM Metric -->
             <div class="metric-box">
                 <div class="metric-header">QPM &gt;50</div>
                 <div class="metric-value" id="qpmValue">1</div>
-                <div class="metric-description">Out of <span id="qpmTotal">30</span> projects</div>
+                <div class="metric-description">Out of <span class="total-count" id="qpmTotal">30</span> projects</div>
             </div>
             
             <!-- Trend Metric -->
@@ -269,9 +278,27 @@
         // Update metrics on the page
         function updateMetrics(data) {
             document.getElementById('totalProjects').textContent = data.totalProjects;
-            document.getElementById('ppmValue').textContent = data.ppmAbove50;
+            
+            const ppmValueEl = document.getElementById('ppmValue');
+            ppmValueEl.textContent = data.ppmAbove50;
+            // Add green class if value is 0
+            if (data.ppmAbove50 === 0) {
+                ppmValueEl.classList.add('zero');
+            } else {
+                ppmValueEl.classList.remove('zero');
+            }
+            
             document.getElementById('ppmTotal').textContent = data.totalProjects;
-            document.getElementById('qpmValue').textContent = data.qpmAbove50;
+            
+            const qpmValueEl = document.getElementById('qpmValue');
+            qpmValueEl.textContent = data.qpmAbove50;
+            // Add green class if value is 0
+            if (data.qpmAbove50 === 0) {
+                qpmValueEl.classList.add('zero');
+            } else {
+                qpmValueEl.classList.remove('zero');
+            }
+            
             document.getElementById('qpmTotal').textContent = data.totalProjects;
             
             // Update trend
