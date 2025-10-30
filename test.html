@@ -58,6 +58,53 @@
             margin-top: 20px;
         }
         
+        .section-header-collapsible {
+            background: linear-gradient(135deg, #2c5f8d 0%, #1e3c72 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+            user-select: none;
+        }
+        
+        .section-header-collapsible:hover {
+            background: linear-gradient(135deg, #3a6fa0 0%, #2a4d82 100%);
+        }
+        
+        .section-header-collapsible.active {
+            border-radius: 6px 6px 0 0;
+        }
+        
+        .toggle-icon {
+            font-size: 18px;
+            transition: transform 0.3s;
+        }
+        
+        .toggle-icon.rotated {
+            transform: rotate(180deg);
+        }
+        
+        .collapsible-content {
+            display: none;
+            background: white;
+            padding: 20px;
+            border-radius: 0 0 6px 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .collapsible-content.show {
+            display: block;
+        }
+        
         .section-content {
             background: white;
             padding: 20px;
@@ -486,8 +533,11 @@
         </div>
         
         <!-- Charts Section -->
-        <div class="section-header">Quality Metrics Charts</div>
-        <div class="section-content">
+        <div class="section-header-collapsible" onclick="toggleChartsSection()">
+            <span>Quality Metrics Charts</span>
+            <span class="toggle-icon" id="chartsToggleIcon">▼</span>
+        </div>
+        <div class="collapsible-content" id="chartsSection">
             <div class="charts-grid">
                 <div class="chart-container">
                     <div class="chart-header">
@@ -1033,6 +1083,25 @@
             link.download = 'supplier_' + currentSupplier.id + '_report_with_trends.json';
             link.click();
             URL.revokeObjectURL(url);
+        }
+        
+        function toggleChartsSection() {
+            const section = document.getElementById('chartsSection');
+            const icon = document.getElementById('chartsToggleIcon');
+            const header = document.querySelector('.section-header-collapsible');
+            
+            section.classList.toggle('show');
+            icon.classList.toggle('rotated');
+            header.classList.toggle('active');
+            
+            // If section is being opened and charts haven't been rendered yet, re-render them
+            if (section.classList.contains('show') && currentSupplier) {
+                // Small delay to ensure the container is visible before rendering
+                setTimeout(() => {
+                    createQPMChart(currentSupplier.qpm);
+                    createPPMChart(currentSupplier.ppm);
+                }, 100);
+            }
         }
         
         // Initialize on load
