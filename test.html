@@ -173,8 +173,13 @@
         }
         
         .status-expired {
-            background: #FFC107;
-            color: #333;
+            background: #f44336;
+            color: white;
+        }
+        
+        .status-not-approved {
+            background: #f44336;
+            color: white;
         }
         
         .status-excellent {
@@ -200,6 +205,13 @@
         .audit-date {
             font-size: 11px;
             color: #666;
+        }
+        
+        .audit-notification {
+            margin-top: 8px;
+            font-size: 10px;
+            color: #f44336;
+            font-weight: 600;
         }
         
         .metrics-row {
@@ -238,6 +250,108 @@
             font-size: 10px;
             font-weight: 600;
             margin-top: 6px;
+        }
+        
+        .trend-indicators {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .trend-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .trend-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .trend-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .trend-badge {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .trend-decreasing {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .trend-increasing {
+            background: #f44336;
+            color: white;
+        }
+        
+        .trend-stable {
+            background: #FFC107;
+            color: #333;
+        }
+        
+        .trend-body {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        
+        .trend-stat {
+            text-align: center;
+        }
+        
+        .trend-stat-label {
+            font-size: 11px;
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        
+        .trend-stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c5f8d;
+        }
+        
+        .trend-notification {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .notification-info {
+            background: #E3F2FD;
+            color: #1976D2;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .notification-warning {
+            background: #FFF3E0;
+            color: #E65100;
+            border-left: 4px solid #FF9800;
+        }
+        
+        .notification-success {
+            background: #E8F5E9;
+            color: #2E7D32;
+            border-left: 4px solid #4CAF50;
         }
         
         .charts-grid {
@@ -333,12 +447,21 @@
             </select>
             <button onclick="updateDashboard()">🔄 Refresh Data</button>
             <button onclick="exportData()">📊 Export Report</button>
+            <button onclick="window.location.href='https://jaewoojoung.github.io/volv/ash.html'">📈 Team Q metric</button>
         </div>
         
         <!-- Supplier Partner Info -->
         <div class="section-header">Supplier Partner Info</div>
         <div class="section-content">
             <div id="supplierInfoContent" class="loading">Loading supplier information...</div>
+        </div>
+        
+        <!-- Trend Indicators Section -->
+        <div class="section-header">Trend Analysis</div>
+        <div class="section-content">
+            <div class="trend-indicators" id="trendIndicators">
+                <div class="loading">Loading trends...</div>
+            </div>
         </div>
         
         <!-- Audits Section -->
@@ -437,6 +560,7 @@
                 currentSupplier = await response.json();
                 
                 displaySupplierInfo(currentSupplier);
+                displayTrendAnalysis(currentSupplier);
                 displayAudits(currentSupplier.audits);
                 displayMetrics(currentSupplier.metrics);
                 createQPMChart(currentSupplier.qpm);
@@ -486,6 +610,169 @@
             `;
         }
         
+        // Calculate trend analysis for QPM and PPM
+        function calculateTrend(data) {
+            const values = data.values;
+            if (values.length < 2) {
+                return { direction: 'stable', slope: 0, current: values[values.length - 1], last: 0 };
+            }
+            
+            const current = values[values.length - 1];
+            const last = values[values.length - 2];
+            const average = values.reduce((a, b) => a + b, 0) / values.length;
+            
+            // Calculate linear regression slope for trend direction
+            const n = values.length;
+            let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+            
+            for (let i = 0; i < n; i++) {
+                sumX += i;
+                sumY += values[i];
+                sumXY += i * values[i];
+                sumX2 += i * i;
+            }
+            
+            const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+            
+            let direction;
+            if (Math.abs(slope) < 5) {
+                direction = 'stable';
+            } else if (slope < 0) {
+                direction = 'decreasing';
+            } else {
+                direction = 'increasing';
+            }
+            
+            return { 
+                direction, 
+                slope: slope.toFixed(2), 
+                current, 
+                last,
+                average: average.toFixed(1),
+                change: (current - last).toFixed(1),
+                changePercent: last > 0 ? ((current - last) / last * 100).toFixed(1) : '0.0'
+            };
+        }
+        
+        // Determine notification based on logic
+        function getNotification(metricType, trend, current, last) {
+            const threshold = 50;
+            
+            // Threshold: QPM/PPM ≤ 50 → Ignore
+            if (current <= threshold && last <= threshold) {
+                return null;
+            }
+            
+            // Last ≤ 50 AND Actual ≥ 50 → Email every 2 weeks
+            if (last <= threshold && current >= threshold) {
+                return {
+                    type: 'warning',
+                    message: `⚠️ ${metricType} crossed threshold (${last} → ${current}). 📨Email sent - notification every 2 weeks.`
+                };
+            }
+            
+            // Actual ≥ 50 AND Trend decreasing → Notification every 4 weeks
+            if (current >= threshold && trend.direction === 'decreasing') {
+                return {
+                    type: 'success',
+                    message: `✓ ${metricType} above threshold but trending down. 📨Email sent - notification every 4 weeks.`
+                };
+            }
+            
+            // Actual ≥ 50 but not decreasing
+            if (current >= threshold) {
+                return {
+                    type: 'warning',
+                    message: `⚠️ ${metricType} remains above threshold (${current}). Monitor closely. 📨Email sent`
+                };
+            }
+            
+            return null;
+        }
+        
+        function displayTrendAnalysis(supplier) {
+            const qpmTrend = calculateTrend(supplier.qpm);
+            const ppmTrend = calculateTrend(supplier.ppm);
+            
+            const qpmNotification = getNotification('QPM', qpmTrend, qpmTrend.current, qpmTrend.last);
+            const ppmNotification = getNotification('PPM', ppmTrend, ppmTrend.current, ppmTrend.last);
+            
+            const getTrendIcon = (direction) => {
+                if (direction === 'decreasing') return '↓';
+                if (direction === 'increasing') return '↑';
+                return '→';
+            };
+            
+            const getTrendClass = (direction) => {
+                if (direction === 'decreasing') return 'trend-decreasing';
+                if (direction === 'increasing') return 'trend-increasing';
+                return 'trend-stable';
+            };
+            
+            const content = document.getElementById('trendIndicators');
+            content.innerHTML = `
+                <div class="trend-card">
+                    <div class="trend-header">
+                        <div class="trend-title">QPM Trend</div>
+                        <div class="trend-badge ${getTrendClass(qpmTrend.direction)}">
+                            ${getTrendIcon(qpmTrend.direction)} ${qpmTrend.direction.toUpperCase()}
+                        </div>
+                    </div>
+                    <div class="trend-body">
+                        <div class="trend-stat">
+                            <div class="trend-stat-label">Current</div>
+                            <div class="trend-stat-value">${qpmTrend.current}</div>
+                        </div>
+                        <div class="trend-stat">
+                            <div class="trend-stat-label">Change</div>
+                            <div class="trend-stat-value" style="color: ${parseFloat(qpmTrend.change) < 0 ? '#4CAF50' : '#f44336'}">
+                                ${qpmTrend.change > 0 ? '+' : ''}${qpmTrend.change}
+                            </div>
+                        </div>
+                        <div class="trend-stat">
+                            <div class="trend-stat-label">Average</div>
+                            <div class="trend-stat-value">${qpmTrend.average}</div>
+                        </div>
+                    </div>
+                    ${qpmNotification ? `
+                        <div class="trend-notification notification-${qpmNotification.type}">
+                            ${qpmNotification.message}
+                        </div>
+                    ` : ''}
+                </div>
+                
+                <div class="trend-card">
+                    <div class="trend-header">
+                        <div class="trend-title">PPM Trend</div>
+                        <div class="trend-badge ${getTrendClass(ppmTrend.direction)}">
+                            ${getTrendIcon(ppmTrend.direction)} ${ppmTrend.direction.toUpperCase()}
+                        </div>
+                    </div>
+                    <div class="trend-body">
+                        <div class="trend-stat">
+                            <div class="trend-stat-label">Current</div>
+                            <div class="trend-stat-value">${ppmTrend.current}</div>
+                        </div>
+                        <div class="trend-stat">
+                            <div class="trend-stat-label">Change</div>
+                            <div class="trend-stat-value" style="color: ${parseFloat(ppmTrend.change) < 0 ? '#4CAF50' : '#f44336'}">
+                                ${ppmTrend.change > 0 ? '+' : ''}${ppmTrend.change}
+                            </div>
+                        </div>
+                        <div class="trend-stat">
+                            <div class="trend-stat-label">Average</div>
+                            <div class="trend-stat-value">${ppmTrend.average}</div>
+                        </div>
+                    </div>
+                    ${ppmNotification ? `
+                        <div class="trend-notification notification-${ppmNotification.type}">
+                            ${ppmNotification.message}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+        
         function displayAudits(audits) {
             const grid = document.getElementById('auditsGrid');
             grid.innerHTML = '';
@@ -493,10 +780,17 @@
             audits.forEach(audit => {
                 const card = document.createElement('div');
                 card.className = 'audit-card';
+                
+                // Determine if email notification should be shown
+                const needsEmailNotification = 
+                    audit.statusClass === 'status-expired' || 
+                    audit.statusClass === 'status-not-approved';
+                
                 card.innerHTML = `
                     <div class="audit-title">${audit.title}</div>
                     <div class="audit-status ${audit.statusClass}">${audit.status}</div>
                     <div class="audit-date">${audit.date}</div>
+                    ${needsEmailNotification ? '<div class="audit-notification">📨Email sent</div>' : ''}
                 `;
                 grid.appendChild(card);
             });
@@ -505,6 +799,7 @@
         function displayMetrics(metrics) {
             const getStatusClass = (status) => {
                 if (status === 'Approved') return 'status-approved';
+                if (status === 'Not Approved') return 'status-not-approved';
                 if (status === 'N/A') return 'status-na';
                 if (status === 'Pending') return 'status-pending';
                 if (status === 'Review') return 'status-review';
@@ -544,10 +839,13 @@
         }
         
         function createQPMChart(data) {
-            const trace = {
+            const trend = calculateTrend(data);
+            
+            const barTrace = {
                 x: data.months,
                 y: data.values,
                 type: 'bar',
+                name: 'QPM',
                 marker: {
                     color: '#2196F3',
                     line: {
@@ -557,19 +855,35 @@
                 }
             };
             
-            const annotation = {
-                x: data.months[data.months.length - 1],
-                y: data.values[data.values.length - 1],
-                xref: 'x',
-                yref: 'y',
-                text: 'Sum of QPM by Month',
-                showarrow: true,
-                arrowhead: 2,
-                ax: -40,
-                ay: -40,
-                font: {
-                    size: 11,
-                    color: '#d32f2f'
+            // Add trend line
+            const trendValues = data.values.map((val, idx) => {
+                return parseFloat(trend.average) + parseFloat(trend.slope) * (idx - data.values.length / 2);
+            });
+            
+            const trendTrace = {
+                x: data.months,
+                y: trendValues,
+                type: 'scatter',
+                mode: 'lines',
+                name: 'Trend',
+                line: {
+                    color: '#ff6b6b',
+                    width: 2,
+                    dash: 'dash'
+                }
+            };
+            
+            // Threshold line
+            const thresholdTrace = {
+                x: data.months,
+                y: Array(data.months.length).fill(50),
+                type: 'scatter',
+                mode: 'lines',
+                name: 'Threshold (50)',
+                line: {
+                    color: '#FFC107',
+                    width: 2,
+                    dash: 'dot'
                 }
             };
             
@@ -585,25 +899,65 @@
                 },
                 margin: { l: 50, r: 20, t: 20, b: 80 },
                 height: 300,
-                annotations: [annotation],
+                showlegend: true,
+                legend: {
+                    x: 0,
+                    y: 1.1,
+                    orientation: 'h'
+                },
                 plot_bgcolor: '#f8f9fa',
                 paper_bgcolor: 'white'
             };
             
-            Plotly.newPlot('qpmChart', [trace], layout, {responsive: true, displayModeBar: false});
+            Plotly.newPlot('qpmChart', [barTrace, trendTrace, thresholdTrace], layout, {responsive: true, displayModeBar: false});
         }
         
         function createPPMChart(data) {
-            const trace = {
+            const trend = calculateTrend(data);
+            
+            const barTrace = {
                 x: data.months,
                 y: data.values,
                 type: 'bar',
+                name: 'PPM',
                 marker: {
                     color: '#2196F3',
                     line: {
                         color: '#1976D2',
                         width: 1
                     }
+                }
+            };
+            
+            // Add trend line
+            const trendValues = data.values.map((val, idx) => {
+                return parseFloat(trend.average) + parseFloat(trend.slope) * (idx - data.values.length / 2);
+            });
+            
+            const trendTrace = {
+                x: data.months,
+                y: trendValues,
+                type: 'scatter',
+                mode: 'lines',
+                name: 'Trend',
+                line: {
+                    color: '#ff6b6b',
+                    width: 2,
+                    dash: 'dash'
+                }
+            };
+            
+            // Threshold line
+            const thresholdTrace = {
+                x: data.months,
+                y: Array(data.months.length).fill(50),
+                type: 'scatter',
+                mode: 'lines',
+                name: 'Threshold (50)',
+                line: {
+                    color: '#FFC107',
+                    width: 2,
+                    dash: 'dot'
                 }
             };
             
@@ -619,11 +973,17 @@
                 },
                 margin: { l: 50, r: 20, t: 20, b: 80 },
                 height: 300,
+                showlegend: true,
+                legend: {
+                    x: 0,
+                    y: 1.1,
+                    orientation: 'h'
+                },
                 plot_bgcolor: '#f8f9fa',
                 paper_bgcolor: 'white'
             };
             
-            Plotly.newPlot('ppmChart', [trace], layout, {responsive: true, displayModeBar: false});
+            Plotly.newPlot('ppmChart', [barTrace, trendTrace, thresholdTrace], layout, {responsive: true, displayModeBar: false});
         }
         
         function updateDashboard() {
@@ -636,12 +996,25 @@
                 return;
             }
             
-            const dataStr = JSON.stringify(currentSupplier, null, 2);
+            const qpmTrend = calculateTrend(currentSupplier.qpm);
+            const ppmTrend = calculateTrend(currentSupplier.ppm);
+            
+            const exportData = {
+                ...currentSupplier,
+                trendAnalysis: {
+                    qpm: qpmTrend,
+                    ppm: ppmTrend,
+                    qpmNotification: getNotification('QPM', qpmTrend, qpmTrend.current, qpmTrend.last),
+                    ppmNotification: getNotification('PPM', ppmTrend, ppmTrend.current, ppmTrend.last)
+                }
+            };
+            
+            const dataStr = JSON.stringify(exportData, null, 2);
             const dataBlob = new Blob([dataStr], {type: 'application/json'});
             const url = URL.createObjectURL(dataBlob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = 'supplier_' + currentSupplier.id + '_report.json';
+            link.download = 'supplier_' + currentSupplier.id + '_report_with_trends.json';
             link.click();
             URL.revokeObjectURL(url);
         }
