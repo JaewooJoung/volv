@@ -1,0 +1,113 @@
+{
+  "id": "supplier1",
+  "parmaId": 94750,
+  "name": "Stoneridge Electronics AS",
+  "address": "Business Park, Seoul",
+  "logo": "S",
+  "projectLink": "#project-94750",
+  "timeplanLink": "#timeplan-94750",
+  "apqp": "Active",
+  "ppap": "Approved",
+  "audits": [
+    {
+      "title": "IATF 16949",
+      "status": "Approved",
+      "date": "03/18/2026",
+      "statusClass": "status-approved"
+    },
+    {
+      "title": "ISO 9001",
+      "status": "Approved",
+      "date": "10/24/2027",
+      "statusClass": "status-approved"
+    },
+    {
+      "title": "ISO 14001",
+      "status": "Approved",
+      "date": "04/05/2025",
+      "statusClass": "status-approved"
+    },
+    {
+      "title": "ISO2700 /TISAX",
+      "status": "Approved",
+      "date": "07/13/2026",
+      "statusClass": "status-approved"
+    },
+    {
+      "title": "SEM",
+      "status": "Approved",
+      "date": "2020",
+      "statusClass": "status-excellent"
+    },
+    {
+      "title": "SAQ",
+      "status": "Approved",
+      "date": "",
+      "statusClass": "status-approved"
+    }
+  ],
+  "metrics": {
+    "swIndex": 2168,
+    "swStatus": "Review",
+    "eeIndex": 1703,
+    "eeStatus": "Pending",
+    "csr": "1661",
+    "csrStatus": "Approved",
+    "sma": 2827,
+    "smaStatus": "Approved",
+    "saq": "1712",
+    "saqStatus": "Approved"
+  },
+  "qpm": {
+    "months": [
+      "2025-01",
+      "2025-02",
+      "2025-03",
+      "2025-04",
+      "2025-05",
+      "2025-06",
+      "2025-07",
+      "2025-08",
+      "2025-09",
+      "2025-10"
+    ],
+    "values": [
+      21,
+      41,
+      49,
+      10,
+      33,
+      15,
+      11,
+      41,
+      26,
+      15
+    ]
+  },
+  "ppm": {
+    "months": [
+      "2025-01",
+      "2025-02",
+      "2025-03",
+      "2025-04",
+      "2025-05",
+      "2025-06",
+      "2025-07",
+      "2025-08",
+      "2025-09",
+      "2025-10"
+    ],
+    "values": [
+      212,
+      530,
+      328,
+      800,
+      397,
+      415,
+      172,
+      200,
+      882,
+      397
+    ]
+  }
+}
