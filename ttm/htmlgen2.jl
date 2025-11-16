@@ -97,6 +97,11 @@ function generate_index_html(suppliers_data::Vector, output_dir::String)
     <meta charset="UTF-8">
     <title>Volvo Supplier Quality Dashboard</title>
     <style>
+<style>
+    @page {
+    size: A3 landscape;
+    margin: 10mm;
+          }    
         * {
             margin: 0;
             padding: 0;
@@ -395,4 +400,5 @@ end
 # Run if executed directly
 if abspath(PROGRAM_FILE) == @__FILE__
     main()
+
 end
