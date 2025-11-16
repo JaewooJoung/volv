@@ -103,7 +103,6 @@ function generate_supplier_html(supplier_data::Dict)
     
     # Calculate current timestamp
     current_time = Dates.format(Dates.now(), "yyyy-mm-dd HH:MM")
-    
     html = """
 <!DOCTYPE html>
 <html>
@@ -112,6 +111,18 @@ function generate_supplier_html(supplier_data::Dict)
     <title>$supplier_name - Quality Metrics</title>
     <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
     <style>
+        @page {
+            size: A3 landscape;
+            margin: 5mm;
+        }
+        
+        @media print {
+            body {
+                width: 420mm;
+                height: 297mm;
+            }
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -578,4 +589,5 @@ function generate_supplier_html(supplier_data::Dict)
 """
     
     return html
+
 end
