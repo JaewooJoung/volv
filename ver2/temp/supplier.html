@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>$SUPPLIER_NAME - Supplier Details</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        @page {
+            size: A3 landscape;
+            margin: 5mm;
+        }
+        
+        @media print {
+            body {
+                width: 420mm;
+                height: 297mm;
+            }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Raleway', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 6px;
+            font-size: 11px;
+        }
+        
+        .back-button {
+            display: inline-block;
+            background: #2c3e50;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 0.9em;
+        }
+        
+        .back-button:hover {
+            background: #34495e;
+        }
+        
+        .header-card {
+            background: white;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .supplier-logo-large {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .header-info {
+            flex: 1;
+        }
+        
+        .header-info h1 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 4px;
+        }
+        
+        .header-meta {
+            display: flex;
+            gap: 20px;
+            color: #7f8c8d;
+            font-size: 1em;
+            align-items: center;
+        }
+        
+        .scorecard-link {
+            background: #3498db;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .scorecard-link:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(52, 152, 219, 0.4);
+        }
+        
+        .scorecard-link i {
+            font-size: 0.9em;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+        
+        .section-title {
+            font-size: 1.1em;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 2px solid #667eea;
+            font-weight: 600;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        
+        .metric-box {
+            background: #f8f9fa;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+        }
+        
+        .metric-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        
+        .metric-value {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .metric-date {
+            font-size: 0.8em;
+            color: #95a5a6;
+            margin-top: 2px;
+        }
+        
+        .status-approved { color: #27ae60; }
+        .status-expired { color: #e74c3c; }
+        .status-pending { color: #f39c12; }
+        .status-na { color: #95a5a6; }
+        
+        .performance-box {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .performance-title {
+            font-size: 1em;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .performance-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 0.95em;
+        }
+        
+        .performance-row:last-child {
+            border-bottom: none;
+        }
+        
+        .trend-up { color: #e74c3c; font-weight: bold; }
+        .trend-down { color: #27ae60; font-weight: bold; }
+        .trend-neutral { color: #95a5a6; font-weight: bold; }
+        
+        .audits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+        
+        .audit-box {
+            background: #f8f9fa;
+            padding: 8px;
+            border-radius: 6px;
+            border-left: 3px solid #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        .audit-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+        
+        .audit-status {
+            padding: 3px 8px;
+            border-radius: 10px;
+            display: inline-block;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .audit-date {
+            font-size: 0.8em;
+            color: #7f8c8d;
+        }
+        
+        .cert-item {
+            background: #f8f9fa;
+            padding: 8px 10px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            border-left: 3px solid #3498db;
+            font-size: 0.9em;
+        }
+        
+        .cert-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .cert-status-Valid { color: #27ae60; font-weight: bold; }
+        .cert-status-Expired { color: #e74c3c; font-weight: bold; }
+        .cert-status-Warning { color: #f39c12; font-weight: bold; }
+        .cert-status-Pass { color: #27ae60; font-weight: bold; }
+        .cert-status-Fail { color: #e74c3c; font-weight: bold; }
+        .cert-status-Good { color: #27ae60; font-weight: bold; }
+        .cert-status-Fair { color: #f39c12; font-weight: bold; }
+        .cert-status-Poor { color: #e74c3c; font-weight: bold; }
+        
+        .info-box {
+            background: #f8f9fa;
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+        
+        .info-value {
+            color: #7f8c8d;
+        }
+        
+        .status-box {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        
+        .status-box.good {
+            border: 2px solid #27ae60;
+            background: #d5f4e6;
+        }
+        
+        .status-box.bad {
+            border: 2px solid #e74c3c;
+            background: #fadbd8;
+        }
+        
+        .status-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+        
+        .status-value {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .sqe-info {
+            background: #e8f4f8;
+            padding: 8px 12px;
+            border-radius: 6px;
+            color: #3498db;
+            font-weight: 500;
+            margin-bottom: 4px;
+            font-size: 0.95em;
+        }
+        
+        .footer {
+            background: white;
+            border-radius: 6px;
+            padding: 6px;
+            margin-top: 6px;
+            text-align: center;
+            color: #7f8c8d;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            font-size: 0.85em;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .back-button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="w3-container">
+        <a href="index.html" class="back-button"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        
+        <!-- Header -->
+        <div class="header-card">
+            <div class="supplier-logo-large">$SUPPLIER_LOGO</div>
+            <div class="header-info">
+                <h1>$SUPPLIER_NAME</h1>
+                <div class="header-meta">
+                    <span><i class="fas fa-id-card"></i> ID: $SUPPLIER_ID</span>
+                    <a href="https://vsib.srv.volvo.com/vsib/Content/sus/SupplierScorecard.aspx?SupplierId=$PARMA_ID" target="_blank" class="scorecard-link">
+                        <i class="fas fa-external-link-alt"></i> Link to Scorecard
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Two Column Layout -->
+        <div class="grid-2">
+            <!-- Left Column -->
+            <div>
+                <!-- SQE Assignment -->
+                <div class="section">
+                    <h2 class="section-title"><i class="fas fa-user-tie"></i> Responsible SQE</h2>
+                    $SQE_HTML
+                </div>
+                
+                <!-- Quality Index -->
+                <div class="section">
+                    <h2 class="section-title"><i class="fas fa-chart-bar"></i> Quality Index Metrics</h2>
+                    <div class="grid-2">
+                        <div class="metric-box">
+                            <div class="metric-label">SW Index</div>
+                            <div class="metric-value $SW_CLASS">$SW_INDEX</div>
+                            <div class="metric-date">$SW_STATUS ($SW_DATE)</div>
+                        </div>
+                        
+                        <div class="metric-box">
+                            <div class="metric-label">EE Index</div>
+                            <div class="metric-value $EE_CLASS">$EE_INDEX</div>
+                            <div class="metric-date">$EE_STATUS ($EE_DATE)</div>
+                        </div>
+                        
+                        <div class="metric-box">
+                            <div class="metric-label">SMA / Criticality 1</div>
+                            <div class="metric-value">$SMA</div>
+                            <div class="metric-date">$SMA_STATUS ($SMA_DATE)</div>
+                        </div>
+                        
+                        <div class="metric-box">
+                            <div class="metric-label">Polymer Index</div>
+                            <div class="metric-value">$POLYMER_INDEX</div>
+                            <div class="metric-date">$POLYMER_STATUS ($POLYMER_DATE)</div>
+                        </div>
+                        
+                        <div class="metric-box">
+                            <div class="metric-label">APQP</div>
+                            <div class="metric-value">$APQP</div>
+                        </div>
+                        
+                        <div class="metric-box">
+                            <div class="metric-label">PPAP</div>
+                            <div class="metric-value">$PPAP</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Performance Metrics -->
+                <div class="section">
+                    <h2 class="section-title"><i class="fas fa-chart-line"></i> Performance Metrics</h2>
+                    <div class="grid-2">
+                        <div class="performance-box">
+                            <div class="performance-title">QPM (Quality Performance)</div>
+                            <div class="performance-row">
+                                <span>Last Period:</span>
+                                <strong>$QPM_LAST</strong>
+                            </div>
+                            <div class="performance-row">
+                                <span>Actual:</span>
+                                <strong>$QPM_ACTUAL</strong>
+                            </div>
+                            <div class="performance-row">
+                                <span>Change:</span>
+                                <strong class="$QPM_CLASS">$QPM_CHANGE</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="performance-box">
+                            <div class="performance-title">PPM (Parts Per Million)</div>
+                            <div class="performance-row">
+                                <span>Last Period:</span>
+                                <strong>$PPM_LAST</strong>
+                            </div>
+                            <div class="performance-row">
+                                <span>Actual:</span>
+                                <strong>$PPM_ACTUAL</strong>
+                            </div>
+                            <div class="performance-row">
+                                <span>Change:</span>
+                                <strong class="$PPM_CLASS">$PPM_CHANGE</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Supplier Status -->
+                <div class="section">
+                    <h2 class="section-title"><i class="fas fa-exclamation-triangle"></i> Supplier Status</h2>
+                    <div class="grid-2">
+                        <div class="status-box">
+                            <div class="status-label">Low Performing Supplier</div>
+                            <div class="status-value">$LOW_PERFORMING</div>
+                        </div>
+                        <div class="status-box">
+                            <div class="status-label">Warranty Severe Issues</div>
+                            <div class="status-value">$WARRANTY_ISSUES</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column -->
+            <div>
+                <!-- Audits Overview -->
+                <div class="section">
+                    <h2 class="section-title"><i class="fas fa-clipboard-check"></i> Audits Overview</h2>
+                    <div class="audits-grid">
+                        $AUDITS_HTML
+                    </div>
+                </div>
+                
+                <!-- Certifications & Compliance -->
+                <div class="section">
+                    <h2 class="section-title"><i class="fas fa-certificate"></i> Certifications & Compliance</h2>
+                    $CERTIFICATIONS_HTML
+                </div>
+                
+                <!-- Supplier Capacity -->
+                <div class="section">
+                    <h2 class="section-title"><i class="fas fa-industry"></i> Supplier Capacity</h2>
+                    <div class="grid-2">
+                        <div class="info-box">
+                            <div class="info-label">Capacity Documents</div>
+                            <div class="info-value">$CAPACITY_DOCS</div>
+                        </div>
+                        <div class="info-box">
+                            <div class="info-label">Capacity Risk Level</div>
+                            <div class="info-value">$CAPACITY_RISK</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p><i class="fas fa-clock"></i> Generated on $GENERATED_DATE | <i class="fas fa-building"></i> ASH,TTM | <i class="fas fa-file-alt"></i> Supplier Details</p>
+        </div>
+    </div>
+</body>
+</html>
