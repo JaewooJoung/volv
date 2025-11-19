@@ -1,0 +1,78 @@
+[[people]]
+name = "Anders Gorner"
+team = "ASH"
+role = "SQE"
+parma_codes = [32731,33568]
+#email = "anders.gorner@consultant.volvo.com"
+email = "jaewoo.joung@consultant.volvo.com"
+
+[[people]]
+name = "Ajay Krishnan"
+team = "ASH"
+role = "SQE"
+parma_codes = [38573]
+#email = "ajay.krishnan@consultant.volvo.com"
+email = "jaewoo.joung@consultant.volvo.com"
+
+[[people]]
+name = "Gharbi Ayoub"
+team = "ASH"
+role = "SQE"
+parma_codes = [33568]
+#email = "gharbi.ayoub@volvo.com"
+email = "jaewoo.joung@consultant.volvo.com"
+
+[[people]]
+name = "Catherine Revais"
+team = "ASH"
+role = "SQE"
+parma_codes = [53059]
+#email = "catherine.revais@volvo.com"
+email = "jaewoo.joung@consultant.volvo.com"
+
+[[people]]
+name = "Hilda Andersson"
+team = "ASH"
+role = "SQE"
+parma_codes = [23629]
+#email = "hilda.andersson@volvo.com"
+email = "jaewoo.joung@consultant.volvo.com"
+
+[[people]]
+name = "Jan Järbrink"
+team = "ASH"
+role = "SQE"
+parma_codes = [18848]
+#email = "jan.jarbrink@volvo.com"
+email = "jaewoo.joung@consultant.volvo.com"
+
+[[people]]
+name = "Jaewoo Joung"
+team = "ASH"
+role = "SQE"
+parma_codes = []
+email = "jaewoo.joung@consultant.volvo.com"
+
+[[people]]
+name = "Jonas Tilhon"
+team = "ASH"
+role = "SQE"
+parma_codes = [47709]
+#email = "jonas.tilhon@volvo.com"
+email = "jaewoo.joung@consultant.volvo.com"
+
+[[people]]
+name = "Lucas de Assis"
+team = "ASH"
+role = "SQE"
+parma_codes = [47709]
+#email = "lucas.de.assis@volvo.com"
+email = "jaewoo.joung@consultant.volvo.com"
+
+[[people]]
+name = "Tobias Emriksson"
+team = "ASH"
+role = "manager"
+parma_codes = []
+#email = "tobias.emriksson@volvo.com"
+email = "jaewoo.joung@consultant.volvo.com"
