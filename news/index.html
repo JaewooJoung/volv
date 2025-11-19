@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>트럭 산업 뉴스</title>
+    <style>
+        body, h1, h2, h3, h4, h5, h6 {
+            font-family: "Raleway", sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .header-info {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1em;
+            color: #2d3748;
+        }
+        
+        .info-item i {
+            color: #667eea;
+            font-size: 1.2em;
+        }
+        
+        .weather-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .weather-icon {
+            font-size: 2em;
+        }
+        
+        .currency-box {
+            background: #f7fafc;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .currency-item {
+            display: inline-block;
+            margin-right: 15px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+        
+        .news-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        
+        .news-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .news-title {
+            color: #2d3748;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        
+        .news-source {
+            color: #718096;
+            font-size: 0.85em;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+        
+        .news-content {
+            color: #4a5568;
+            line-height: 1.7;
+            font-size: 0.95em;
+        }
+        
+        .news-content p {
+            margin-bottom: 10px;
+        }
+        
+        .tag {
+            display: inline-block;
+            background: #edf2f7;
+            color: #4a5568;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-top: 15px;
+            margin-right: 5px;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .info-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .currency-item {
+                display: block;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="w3-content" style="max-width:1200px; margin-top:30px;">
+    
+    <!-- Header Section -->
+    <header class="w3-container w3-center" style="padding:20px 16px; color:white;">
+        <h1 class="w3-jumbo"><b><i class="fas fa-truck"></i> 글로벌 트럭 산업 뉴스</b></h1>
+    </header>
+
+    <!-- Info Bar -->
+    <div class="header-info">
+        <div class="info-row">
+            <div class="info-item">
+                <i class="fas fa-calendar-day"></i>
+                <span id="current-date"></span>
+            </div>
+            
+            <div class="info-item weather-info">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>예테보리</span>
+                <i id="weather-icon" class="weather-icon"></i>
+                <span id="weather-temp"></span>
+            </div>
+        </div>
+        
+        <div class="currency-box" style="margin-top: 15px;">
+            <i class="fas fa-exchange-alt" style="color: #667eea; margin-right: 10px;"></i>
+            <span class="currency-item" id="usd-rate">1 USD = <span id="usd-value">로딩중...</span> KRW</span>
+            <span class="currency-item" id="sek-rate">1 SEK = <span id="sek-value">로딩중...</span> KRW</span>
+            <span class="currency-item" id="eur-rate">1 EUR = <span id="eur-value">로딩중...</span> KRW</span>
+        </div>
+    </div>
+
+    <!-- News Cards -->
+    <div class="w3-row-padding">
+        
+        <!-- 르노 트럭 -->
+        <div class="w3-col l6 m12">
+            <div class="news-card">
+                <div class="news-title">르노 트럭, 건설자재 운송 전동화에 전념</div>
+                <div class="news-source">motor16.com, 2024년 11월 17일</div>
+                <div class="news-content">
+                    <p>르노 트럭이 건설 및 건설자재 운송의 전동화를 적극 추진하고 있습니다. E-Tech Construction 라인업은 최대 20톤의 적재 용량과 490kW(660마력)의 출력을 제공하며, 모듈식 배터리로 최대 300km 주행이 가능합니다.</p>
+                    <p><strong>주요 특징:</strong></p>
+                    <p>• 2시간 이내 급속 충전<br>
+                    • CO2 배출량 90% 감소<br>
+                    • 도심 저공해 구역 무제한 접근<br>
+                    • 2040년까지 전 차량 전동화 목표</p>
+                </div>
+                <span class="tag"><i class="fas fa-bolt"></i> 전기차</span>
+                <span class="tag"><i class="fas fa-leaf"></i> 친환경</span>
+            </div>
+        </div>
+
+        <!-- 맥 트럭 -->
+        <div class="w3-col l6 m12">
+            <div class="news-card">
+                <div class="news-title">맥 트럭, 창립 125주년 기념 마일스톤 어워드 수상</div>
+                <div class="news-source">trucknews.com, 2024년 11월 17일</div>
+                <div class="news-content">
+                    <p>Greater Lehigh Valley 상공회의소가 맥 트럭의 125주년을 기념하여 마일스톤 어워드를 수여했습니다. 1900년 브루클린에서 두 형제가 설립한 맥 트럭은 현재 세계 주요 트럭 제조사로 성장했습니다.</p>
+                    <p><strong>생산 현황:</strong></p>
+                    <p>• 펜실베이니아 Macungie: Class 8 트럭 생산<br>
+                    • 버지니아 Salem: Class 6-7 트럭 생산<br>
+                    • 후버댐 등 주요 인프라 프로젝트 참여</p>
+                </div>
+                <span class="tag"><i class="fas fa-award"></i> 기업역사</span>
+            </div>
+        </div>
+
+        <!-- EPA NOx 규제 -->
+        <div class="w3-col l6 m12">
+            <div class="news-card">
+                <div class="news-title">EPA, 2027년 NOx 규제 일정 유지하되 대폭 변경 예정</div>
+                <div class="news-source">ccjdigital.com, 2024년 11월 17일</div>
+                <div class="news-content">
+                    <p>미국 환경보호청(EPA)이 2027년 모델 연도부터 시행되는 중장비 차량 NOx 배출 규제 일정을 유지하되, 주요 변경사항을 도입할 계획입니다. 트럭 업계는 2031년으로 연기를 요청했으나 받아들여지지 않았습니다.</p>
+                    <p><strong>현재 규제 내용:</strong></p>
+                    <p>• 배기가스 NOx 배출량 80% 이상 감축<br>
+                    • 미세먼지 배출 한도 50% 감소<br>
+                    • 보증 기간 10만→45만 마일로 연장<br>
+                    • 유효 수명 43.5만→65만 마일로 확대</p>
+                    <p>EPA는 2026년 봄 새로운 규제안을 발표할 예정이며, 비용 절감을 위한 대폭적인 변경이 예상됩니다.</p>
+                </div>
+                <span class="tag"><i class="fas fa-gavel"></i> 환경규제</span>
+                <span class="tag"><i class="fas fa-landmark"></i> 정책</span>
+            </div>
+        </div>
+
+        <!-- 이베코-타타 -->
+        <div class="w3-col l6 m12">
+            <div class="news-card">
+                <div class="news-title">EU, 타타 모터스의 이베코 그룹 인수 승인</div>
+                <div class="news-source">elmercantil.com, 2024년 11월 17일</div>
+                <div class="news-content">
+                    <p>유럽연합 집행위원회가 인도 타타 모터스의 이베코 그룹 인수를 승인했습니다. 38억 유로 규모의 이번 거래는 이베코의 방산 부문(17억 유로에 레오나르도社에 매각)을 제외한 것입니다.</p>
+                    <p><strong>거래 내용:</strong></p>
+                    <p>• 투자 규모: 38억 유로<br>
+                    • 2년간 비재무적 약속 이행<br>
+                    • 생산시설 및 공급망 유지<br>
+                    • 스페인 Valladolid·Madrid 공장 유지</p>
+                    <p>EU는 양사의 결합 시장 지위가 제한적이어서 경쟁 문제가 없다고 판단했습니다.</p>
+                </div>
+                <span class="tag"><i class="fas fa-handshake"></i> M&A</span>
+                <span class="tag"><i class="fas fa-globe"></i> 글로벌</span>
+            </div>
+        </div>
+
+        <!-- 다임러 트럭 -->
+        <div class="w3-col l12">
+            <div class="news-card">
+                <div class="news-title">다임러 트럭, 수소연료전지 트랙터 차기 단계 진입</div>
+                <div class="news-source">ttnews.com, 2024년 11월 17일</div>
+                <div class="news-content">
+                    <p>다임러 트럭의 메르세데스-벤츠 GenH2 트럭이 5개 추가 운송사와 2026년 2차 테스트를 진행합니다. DHL Supply Chain, Hornbach, Teva Germany, Reber Logistik, Rhenus가 참여하며, 2026년 말까지 독일 Wörth 공장에서 100대를 생산할 예정입니다.</p>
+                    <p><strong>개발 현황:</strong></p>
+                    <p>• 양산 시작: 2030년대 초(기존 2020년대 후반에서 연기)<br>
+                    • 기술: 액체 수소 사용(기체 수소 대비 효율적)<br>
+                    • 1차 테스트: Amazon, Air Products 등 참여<br>
+                    • 연기 사유: 수소 충전 인프라 구축 지연</p>
+                </div>
+                <span class="tag"><i class="fas fa-wind"></i> 수소연료전지</span>
+                <span class="tag"><i class="fas fa-leaf"></i> 친환경</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="w3-container w3-padding-32 w3-center" style="color:white; margin-top:30px;">
+        <p>트럭 산업 뉴스 업데이트 | <span id="footer-date"></span></p>
+    </footer>
+
+</div>
+
+<script>
+    // 현재 날짜 표시
+    function updateDate() {
+        const now = new Date();
+        const options = { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric', 
+            weekday: 'long' 
+        };
+        const dateString = now.toLocaleDateString('ko-KR', options);
+        document.getElementById('current-date').textContent = dateString;
+        document.getElementById('footer-date').textContent = dateString;
+    }
+
+    // 예테보리 날씨 가져오기 (OpenWeatherMap API 사용)
+    async function getWeather() {
+        try {
+            // OpenWeatherMap 무료 API - API 키가 필요합니다
+            const apiKey = 'YOUR_API_KEY'; // 실제 사용시 API 키 필요
+            const city = 'Gothenburg';
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=kr`;
+            
+            // API 키가 없을 경우 기본값 표시
+            if (apiKey === 'YOUR_API_KEY') {
+                document.getElementById('weather-icon').innerHTML = '<i class="fas fa-cloud" style="color: #718096;"></i>';
+                document.getElementById('weather-temp').textContent = '날씨 정보';
+                return;
+            }
+            
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            if (data.weather && data.weather[0]) {
+                const temp = Math.round(data.main.temp);
+                const weatherCode = data.weather[0].icon;
+                
+                // 날씨 아이콘 매핑
+                let iconClass = 'fa-cloud';
+                let iconColor = '#718096';
+                
+                if (weatherCode.includes('01')) {
+                    iconClass = 'fa-sun';
+                    iconColor = '#f59e0b';
+                } else if (weatherCode.includes('02') || weatherCode.includes('03') || weatherCode.includes('04')) {
+                    iconClass = 'fa-cloud-sun';
+                    iconColor = '#94a3b8';
+                } else if (weatherCode.includes('09') || weatherCode.includes('10')) {
+                    iconClass = 'fa-cloud-rain';
+                    iconColor = '#3b82f6';
+                } else if (weatherCode.includes('11')) {
+                    iconClass = 'fa-cloud-bolt';
+                    iconColor = '#8b5cf6';
+                } else if (weatherCode.includes('13')) {
+                    iconClass = 'fa-snowflake';
+                    iconColor = '#60a5fa';
+                } else if (weatherCode.includes('50')) {
+                    iconClass = 'fa-smog';
+                    iconColor = '#9ca3af';
+                }
+                
+                document.getElementById('weather-icon').innerHTML = `<i class="fas ${iconClass}" style="color: ${iconColor};"></i>`;
+                document.getElementById('weather-temp').textContent = `${temp}°C`;
+            }
+        } catch (error) {
+            console.error('날씨 정보 가져오기 실패:', error);
+            document.getElementById('weather-icon').innerHTML = '<i class="fas fa-cloud" style="color: #718096;"></i>';
+            document.getElementById('weather-temp').textContent = '날씨 정보';
+        }
+    }
+
+    // 환율 정보 가져오기 (ExchangeRate-API 사용)
+    async function getCurrencyRates() {
+        try {
+            // ExchangeRate-API 무료 버전
+            const url = 'https://api.exchangerate-api.com/v4/latest/KRW';
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            if (data.rates) {
+                // KRW 기준으로 받아서 역수 계산
+                const usdRate = (1 / data.rates.USD).toFixed(2);
+                const sekRate = (1 / data.rates.SEK).toFixed(2);
+                const eurRate = (1 / data.rates.EUR).toFixed(2);
+                
+                document.getElementById('usd-value').textContent = usdRate;
+                document.getElementById('sek-value').textContent = sekRate;
+                document.getElementById('eur-value').textContent = eurRate;
+            }
+        } catch (error) {
+            console.error('환율 정보 가져오기 실패:', error);
+            // 기본값 표시
+            document.getElementById('usd-value').textContent = '1461.09';
+            document.getElementById('sek-value').textContent = '154.23';
+            document.getElementById('eur-value').textContent = '1694.86';
+        }
+    }
+
+    // 페이지 로드시 실행
+    document.addEventListener('DOMContentLoaded', function() {
+        updateDate();
+        getWeather();
+        getCurrencyRates();
+        
+        // 10분마다 날씨와 환율 업데이트
+        setInterval(getWeather, 600000);
+        setInterval(getCurrencyRates, 600000);
+    });
+</script>
+
+</body>
+</html>
