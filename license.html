@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Software Licenses Database</title>
+    <title>Software License Permissions Database</title>
     <style>
         * {
             box-sizing: border-box;
@@ -20,7 +20,7 @@
         }
         
         .container {
-            max-width: 1400px;
+            max-width: 1800px;
             margin: 0 auto;
         }
         
@@ -104,7 +104,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 900px;
+            min-width: 1500px;
         }
         
         th {
@@ -154,6 +154,30 @@
             padding: 2px 6px;
             border-radius: 3px;
             font-size: 0.9rem;
+        }
+        
+        .permission-yes {
+            color: #38a169;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .permission-no {
+            color: #e53e3e;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .permission-conditional {
+            color: #d69e2e;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .permission-notes {
+            font-size: 0.8rem;
+            color: #4a5568;
+            margin-top: 2px;
         }
         
         .category {
@@ -210,6 +234,28 @@
             font-size: 0.9rem;
         }
         
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+        }
+        
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -236,8 +282,8 @@
 <body>
     <div class="container">
         <header>
-            <h1>Software Licenses Database</h1>
-            <p class="description">Browse and sort through a comprehensive list of software licenses with SPDX identifiers and categories.</p>
+            <h1>Software License Permissions Database</h1>
+            <p class="description">Compare software licenses based on permissions, limitations, and conditions. Click column headers to sort.</p>
         </header>
         
         <div class="controls">
@@ -248,9 +294,8 @@
                 <button class="category-btn active" data-category="all">All Licenses</button>
                 <button class="category-btn" data-category="Popular / Strong Community">Popular</button>
                 <button class="category-btn" data-category="Other/Miscellaneous">Other</button>
-                <button class="category-btn" data-category="Superseded">Superseded</button>
-                <button class="category-btn" data-category="Non-Reusable">Non-Reusable</button>
-                <button class="category-btn" data-category="Special Purpose">Special Purpose</button>
+                <button class="category-btn" data-category="Permissive">Permissive</button>
+                <button class="category-btn" data-category="Copyleft">Copyleft</button>
             </div>
         </div>
         
@@ -261,6 +306,23 @@
                         <th data-sort="name">License Name</th>
                         <th data-sort="spdx">SPDX ID</th>
                         <th data-sort="category">Category</th>
+                        <th colspan="4" style="text-align: center;">Permissions</th>
+                        <th colspan="3" style="text-align: center;">Limitations</th>
+                        <th colspan="2" style="text-align: center;">Conditions</th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th data-sort="commercial">Commercial Use</th>
+                        <th data-sort="modification">Modification</th>
+                        <th data-sort="distribution">Distribution</th>
+                        <th data-sort="private">Private Use</th>
+                        <th data-sort="liability">Liability</th>
+                        <th data-sort="warranty">Warranty</th>
+                        <th data-sort="patent">Patent Use</th>
+                        <th data-sort="notice">License Notice</th>
+                        <th data-sort="sameLicense">Same License</th>
                     </tr>
                 </thead>
                 <tbody id="licenseTableBody">
@@ -269,136 +331,309 @@
             </table>
         </div>
         
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #38a169;"></div>
+                <span>Allowed</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #e53e3e;"></div>
+                <span>Not Allowed</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #d69e2e;"></div>
+                <span>Conditional</span>
+            </div>
+        </div>
+        
         <div class="stats">
             <p id="licenseCount">Showing 0 licenses</p>
         </div>
     </div>
 
     <script>
-        // License data
+        // License data with permissions, limitations, and conditions
         const licenses = [
-            { name: "1-clause BSD License", spdx: "BSD-1-Clause", category: "Other/Miscellaneous" },
-            { name: "Academic Free License v. 3.0", spdx: "AFL-3.0", category: "Redundant with more popular" },
-            { name: "Adaptive Public License 1.0", spdx: "APL-1.0", category: "Other/Miscellaneous" },
-            { name: "Apache License, Version 2.0", spdx: "Apache-2.0", category: "Popular / Strong Community" },
-            { name: "Apache Software License, version 1.1", spdx: "Apache-1.1", category: "Superseded" },
-            { name: "Apple Public Source License 2.0", spdx: "APSL-2.0", category: "Non-Reusable" },
-            { name: "Artistic License (Perl) 1.0", spdx: "Artistic-1.0-Perl", category: "Superseded" },
-            { name: "Artistic License 1.0", spdx: "Artistic-1.0", category: "Superseded" },
-            { name: "Artistic License 2.0", spdx: "Artistic-2.0", category: "Other/Miscellaneous" },
-            { name: "Attribution Assurance License", spdx: "AAL", category: "Redundant with more popular" },
-            { name: "Blue Oak Model License", spdx: "BlueOak-1.0.0", category: "Redundant with more popular" },
-            { name: "Boost Software License 1.0", spdx: "BSL-1.0", category: "Uncategorized" },
-            { name: "BSD+Patent", spdx: "BSD-2-Clause-Patent", category: "Special Purpose" },
-            { name: "BSD-3-Clause-Open-MPI", spdx: "BSD-3-Clause-Open-MPI", category: "Other/Miscellaneous" },
-            { name: "Cea Cnrs Inria Logiciel Libre License, version 2.1", spdx: "CECILL-2.1", category: "International" },
-            { name: "CERN Open Hardware Licence Version 2 – Permissive", spdx: "CERN-OHL-P-2.0", category: "Special Purpose" },
-            { name: "CERN Open Hardware Licence Version 2 – Strongly Reciprocal", spdx: "CERN-OHL-S-2.0", category: "Special Purpose" },
-            { name: "CERN Open Hardware Licence Version 2 – Weakly Reciprocal", spdx: "CERN-OHL-W-2.0", category: "Special Purpose" },
-            { name: "CMU License", spdx: "MIT-CMU", category: "" },
-            { name: "COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL)", spdx: "CDDL-1.1", category: "Uncategorized" },
-            { name: "Common Development and Distribution License 1.0", spdx: "CDDL-1.0", category: "Popular / Strong Community" },
-            { name: "Common Public Attribution License Version 1.0", spdx: "CPAL-1.0", category: "Uncategorized" },
-            { name: "Common Public License Version 1.0", spdx: "CPL-1.0", category: "Superseded" },
-            { name: "Computer Associates Trusted Open Source License 1.1", spdx: "CATOSL-1.1", category: "Non-Reusable" },
-            { name: "Cryptographic Autonomy License", spdx: "CAL-1.0", category: "Uncategorized" },
-            { name: "CUA Office Public License", spdx: "CUA-OPL-1.0", category: "Voluntarily retired" },
-            { name: "Eclipse Public License -v 1.0", spdx: "EPL-1.0", category: "Superseded" },
-            { name: "Eclipse Public License version 2.0", spdx: "EPL-2.0", category: "Popular / Strong Community" },
-            { name: "eCos License version 2.0", spdx: "eCos-2.0", category: "Non-Reusable" },
-            { name: "Educational Community License, Version 1.0", spdx: "ECL-1.0", category: "Superseded" },
-            { name: "Educational Community License, Version 2.0", spdx: "ECL-2.0", category: "Special Purpose" },
-            { name: "Eiffel Forum License, version 1", spdx: "EFL-1.0", category: "Superseded" },
-            { name: "Eiffel Forum License, Version 2", spdx: "EFL-2.0", category: "Redundant with more popular" },
-            { name: "Entessa Public License Version. 1.0", spdx: "Entessa", category: "Non-Reusable" },
-            { name: "EU DataGrid Software License", spdx: "EUDatagrid", category: "Non-Reusable" },
-            { name: "European Union Public Licence, version 1.2", spdx: "EUPL-1.2", category: "International" },
-            { name: "Fair License", spdx: "Fair", category: "Redundant with more popular" },
-            { name: "Frameworx License 1.0", spdx: "Frameworx-1.0", category: "Non-Reusable" },
-            { name: "GNU Affero General Public License version 3", spdx: "AGPL-3.0-only", category: "Uncategorized" },
-            { name: "GNU General Public License version 2", spdx: "GPL-2.0", category: "Popular / Strong Community" },
-            { name: "GNU General Public License version 3", spdx: "GPL-3.0-only", category: "Popular / Strong Community" },
-            { name: "GNU General Public License, version 1", spdx: "", category: "Superseded" },
-            { name: "GNU Lesser General Public License version 2.1", spdx: "LGPL-2.1", category: "Popular / Strong Community" },
-            { name: "GNU Lesser General Public License version 3", spdx: "LGPL-3.0-only", category: "Popular / Strong Community" },
-            { name: "GNU Library General Public License version 2", spdx: "LGPL-2.0-only", category: "Popular / Strong Community" },
-            { name: "Historical Permission Notice and Disclaimer", spdx: "HPND", category: "Redundant with more popular" },
-            { name: "IBM Public License Version 1.0", spdx: "IPL-1.0", category: "Non-Reusable" },
-            { name: "ICU License", spdx: "ICU", category: "" },
-            { name: "Intel Open Source License", spdx: "Intel", category: "Voluntarily retired" },
-            { name: "IPA Font License", spdx: "IPA", category: "Special Purpose" },
-            { name: "ISC License", spdx: "ISC", category: "Uncategorized" },
-            { name: "Jabber Open Source License", spdx: "", category: "Voluntarily retired" },
-            { name: "JAM License", spdx: "Jam", category: "Other/Miscellaneous" },
-            { name: "LaTeX Project Public License, Version 1.3c", spdx: "LPPL-1.3c", category: "Non-Reusable" },
-            { name: "Lawrence Berkeley National Labs BSD Variant License", spdx: "BSD-3-Clause-LBNL", category: "Special Purpose" },
-            { name: "Licence Libre du Québec – Permissive version 1.1", spdx: "LiLiQ-P-1.1", category: "International" },
-            { name: "Licence Libre du Québec – Réciprocité forte version 1.1", spdx: "LiLiQ-Rplus-1.1", category: "International" },
-            { name: "Licence Libre du Québec – Réciprocité version 1.1", spdx: "LiLiQ-R-1.1", category: "International" },
-            { name: "Los Alamos National Labs BSD-3 Variant", spdx: "", category: "Non-Reusable" },
-            { name: "Lucent Public License Version 1.02", spdx: "LPL-1.02", category: "Redundant with more popular" },
-            { name: "Lucent Public License, Plan 9, version 1.0", spdx: "LPL-1.0", category: "Superseded" },
-            { name: "Microsoft Public License", spdx: "MS-PL", category: "Uncategorized" },
-            { name: "Microsoft Reciprocal License", spdx: "MS-RL", category: "Uncategorized" },
-            { name: "MirOS Licence", spdx: "MirOS", category: "Uncategorized" },
-            { name: "MIT No Attribution License", spdx: "MIT-0", category: "Other/Miscellaneous" },
-            { name: "MITRE Collaborative Virtual Workspace License", spdx: "", category: "Voluntarily retired" },
-            { name: "Motosoto Open Source License", spdx: "Motosoto", category: "Non-Reusable" },
-            { name: "Mozilla Public License 1.1", spdx: "MPL-1.1", category: "Superseded" },
-            { name: "Mozilla Public License 2.0", spdx: "MPL-2.0", category: "Popular / Strong Community" },
-            { name: "Mozilla Public License, version 1.0", spdx: "MPL-1.0", category: "Superseded" },
-            { name: "Mulan Permissive Software License v2", spdx: "MulanPSL-2.0", category: "International" },
-            { name: "Multics License", spdx: "Multics", category: "Non-Reusable" },
-            { name: "NASA Open Source Agreement v1.3", spdx: "NASA-1.3", category: "Special Purpose" },
-            { name: "NAUMEN Public License", spdx: "Naumen", category: "Non-Reusable" },
-            { name: "Nokia Open Source License Version 1.0a", spdx: "NOKIA", category: "Non-Reusable" },
-            { name: "Non-Profit Open Software License version 3.0", spdx: "NPOSL-3.0", category: "Uncategorized" },
-            { name: "NTP License", spdx: "NTP", category: "Uncategorized" },
-            { name: "Open Group Test Suite License", spdx: "OGTSL", category: "Uncategorized" },
-            { name: "Open Logistics Foundation License v1.3", spdx: "OLFL-1.3", category: "Special Purpose" },
-            { name: "Open Software License 2.1", spdx: "OSL-2.1", category: "Superseded" },
-            { name: "Open Software License, version 1.0", spdx: "OSL-1.0", category: "Superseded" },
-            { name: "OpenLDAP Public License Version 2.8", spdx: "OLDAP-2.8", category: "Redundant with more popular" },
-            { name: "OSC License 1.0", spdx: "", category: "International" },
-            { name: "OSET Public License version 2.1", spdx: "OSET-PL-2.1", category: "Special Purpose" },
-            { name: "PHP License 3.0", spdx: "PHP-3.0", category: "Superseded" },
-            { name: "PHP License 3.01", spdx: "PHP-3.01", category: "Non-Reusable" },
-            { name: "Python License, Version 2", spdx: "PSF-2.0", category: "Non-Reusable" },
-            { name: "RealNetworks Public Source License Version 1.0", spdx: "RPSL-1.0", category: "Non-Reusable" },
-            { name: "Reciprocal Public License 1.5", spdx: "RPL-1.5", category: "Uncategorized" },
-            { name: "Reciprocal Public License, version 1.1", spdx: "RPL-1.1", category: "Superseded" },
-            { name: "SIL OPEN FONT LICENSE", spdx: "OFL-1.1", category: "Special Purpose" },
-            { name: "Simple Public License", spdx: "SimPL-2.0", category: "Uncategorized" },
-            { name: "Sun Industry Standards Source License", spdx: "SISSL", category: "Voluntarily retired" },
-            { name: "Sun Public License, Version 1.0", spdx: "SPL-1.0", category: "Non-Reusable" },
-            { name: "The 2-Clause BSD License", spdx: "BSD-2-Clause", category: "Popular / Strong Community" },
-            { name: "The 3-Clause BSD License", spdx: "BSD-3-Clause", category: "Popular / Strong Community" },
-            { name: "The CNRI portion of the multi-part Python License", spdx: "CNRI-Python", category: "Non-Reusable" },
-            { name: "The European Union Public License, version 1.1", spdx: "EUPL-1.1", category: "Superseded" },
-            { name: "The MIT License", spdx: "MIT", category: "Popular / Strong Community" },
-            { name: "The Nethack General Public License", spdx: "NGPL", category: "Non-Reusable" },
-            { name: "The OCLC Research Public License 2.0 License", spdx: "", category: "Non-Reusable" },
-            { name: "The Open Software License 3.0", spdx: "OSL-3.0", category: "Other/Miscellaneous" },
-            { name: "The PostgreSQL License", spdx: "PostgreSQL", category: "Redundant with more popular" },
-            { name: "The Q Public License Version", spdx: "QPL-1.0", category: "Other/Miscellaneous" },
-            { name: "The Ricoh Source Code Public License", spdx: "RSCPL", category: "Non-Reusable" },
-            { name: "The Sleepycat License", spdx: "Sleepycat", category: "Non-Reusable" },
-            { name: "The Sybase Open Source Licence", spdx: "Watcom-1.0", category: "Non-Reusable" },
-            { name: "The Universal Permissive License Version 1.0", spdx: "UPL-1.0", category: "Other/Miscellaneous" },
-            { name: "The University of Illinois/NCSA Open Source License", spdx: "NCSA", category: "Redundant with more popular" },
-            { name: "The Unlicense", spdx: "Unlicense", category: "Special Purpose" },
-            { name: "The Vovida Software License v. 1.0", spdx: "VSL-0.1", category: "Non-Reusable" },
-            { name: "The W3C® Software and Document license", spdx: "W3C-20150513", category: "Non-Reusable" },
-            { name: "The wxWindows Library Licence", spdx: "wxWindows", category: "Non-Reusable" },
-            { name: "The X.Net, Inc. License", spdx: "Xnet", category: "Redundant with more popular" },
-            { name: "The zlib/libpng License", spdx: "Zlib", category: "Other/Miscellaneous" },
-            { name: "UNICODE LICENSE V3", spdx: "", category: "Special Purpose" },
-            { name: "Unicode, Inc. License Agreement – Data Files and Software", spdx: "Unicode-DFS-2015", category: "Special Purpose" },
-            { name: "Upstream Compatibility License v1.0", spdx: "UCL-1.0", category: "Special Purpose" },
-            { name: "WordNet", spdx: "", category: "Non-Reusable" },
-            { name: "Zero-Clause BSD", spdx: "0BSD", category: "Other/Miscellaneous" },
-            { name: "Zope Public License 2.0", spdx: "ZPL-2.0", category: "Superseded" },
-            { name: "Zope Public License 2.1", spdx: "ZPL-2.1", category: "Redundant with more popular" }
+            {
+                name: "MIT License",
+                spdx: "MIT",
+                category: "Popular / Strong Community",
+                permissions: {
+                    commercial: { value: "yes", notes: "" },
+                    modification: { value: "yes", notes: "" },
+                    distribution: { value: "yes", notes: "" },
+                    private: { value: "yes", notes: "" }
+                },
+                limitations: {
+                    liability: { value: "yes", notes: "Limited" },
+                    warranty: { value: "no", notes: "No warranty" },
+                    patent: { value: "no", notes: "No explicit patent grant" }
+                },
+                conditions: {
+                    notice: { value: "yes", notes: "Must include copyright notice" },
+                    sameLicense: { value: "no", notes: "" }
+                }
+            },
+            {
+                name: "Apache License 2.0",
+                spdx: "Apache-2.0",
+                category: "Popular / Strong Community",
+                permissions: {
+                    commercial: { value: "yes", notes: "" },
+                    modification: { value: "yes", notes: "" },
+                    distribution: { value: "yes", notes: "" },
+                    private: { value: "yes", notes: "" }
+                },
+                limitations: {
+                    liability: { value: "yes", notes: "Limited" },
+                    warranty: { value: "no", notes: "No warranty" },
+                    patent: { value: "yes", notes: "Explicit patent grant" }
+                },
+                conditions: {
+                    notice: { value: "yes", notes: "Must include copyright, patent, and attribution notices" },
+                    sameLicense: { value: "no", notes: "" }
+                }
+            },
+            {
+                name: "GNU GPL v3.0",
+                spdx: "GPL-3.0-only",
+                category: "Popular / Strong Community",
+                permissions: {
+                    commercial: { value: "yes", notes: "" },
+                    modification: { value: "yes", notes: "" },
+                    distribution: { value: "conditional", notes: "Must provide source code" },
+                    private: { value: "yes", notes: "" }
+                },
+                limitations: {
+                    liability: { value: "yes", notes: "Limited" },
+                    warranty: { value: "no", notes: "No warranty" },
+                    patent: { value: "yes", notes: "Explicit patent grant and retaliation clause" }
+                },
+                conditions: {
+                    notice: { value: "yes", notes: "Must include copyright notice and license" },
+                    sameLicense: { value: "yes", notes: "Derivative works must use GPL v3" }
+                }
+            },
+            {
+                name: "BSD 2-Clause",
+                spdx: "BSD-2-Clause",
+                category: "Popular / Strong Community",
+                permissions: {
+                    commercial: { value: "yes", notes: "" },
+                    modification: { value: "yes", notes: "" },
+                    distribution: { value: "yes", notes: "" },
+                    private: { value: "yes", notes: "" }
+                },
+                limitations: {
+                    liability: { value: "yes", notes: "Limited" },
+                    warranty: { value: "no", notes: "No warranty" },
+                    patent: { value: "no", notes: "No explicit patent grant" }
+                },
+                conditions: {
+                    notice: { value: "yes", notes: "Must include copyright notice" },
+                    sameLicense: { value: "no", notes: "" }
+                }
+            },
+            {
+                name: "BSD 3-Clause",
+                spdx: "BSD-3-Clause",
+                category: "Popular / Strong Community",
+                permissions: {
+                    commercial: { value: "yes", notes: "" },
+                    modification: { value: "yes", notes: "" },
+                    distribution: { value: "yes", notes: "" },
+                    private: { value: "yes", notes: "" }
+                },
+                limitations: {
+                    liability: { value: "yes", notes: "Limited" },
+                    warranty: { value: "no", notes: "No warranty" },
+                    patent: { value: "no", notes: "No explicit patent grant" }
+                },
+                conditions: {
+                    notice: { value: "yes", notes: "Must include copyright notice" },
+                    sameLicense: { value: "no", notes: "No endorsement without permission" }
+                }
+            },
+            {
+                name: "Mozilla Public License 2.0",
+                spdx: "MPL-2.0",
+                category: "Popular / Strong Community",
+                permissions: {
+                    commercial: { value: "yes", notes: "" },
+                    modification: { value: "yes", notes: "" },
+                    distribution: { value: "conditional", notes: "File-based copyleft" },
+                    private: { value: "yes", notes: "" }
+                },
+                limitations: {
+                    liability: { value: "yes", notes: "Limited" },
+                    warranty: { value: "no", notes: "No warranty" },
+                    patent: { value: "yes", notes: "Explicit patent grant" }
+                },
+                conditions: {
+                    notice: { value: "yes", notes: "Must include copyright notice" },
+                    sameLicense: { value: "conditional", notes: "MPL for MPL-licensed files" }
+                }
+            },
+            {
+                name: "Eclipse Public License 2.0",
+                spdx: "EPL-2.0",
+                category: "Popular / Strong Community",
+                permissions: {
+                    commercial: { value: "yes", notes: "" },
+                    modification: { value: "yes", notes: "" },
+                    distribution: { value: "conditional", notes: "Weak copyleft" },
+                    private: { value: "yes", notes: "" }
+                },
+                limitations: {
+                    liability: { value: "yes", notes: "Limited" },
+                    warranty: { value: "no", notes: "No warranty" },
+                    patent: { value: "yes", notes: "Explicit patent grant" }
+                },
+                conditions: {
+                    notice: { value: "yes", notes: "Must include copyright notice" },
+                    sameLicense: { value: "conditional", notes: "EPL for EPL-licensed contributions" }
+                }
+            },
+            {
+                name: "GNU LGPL v2.1",
+                spdx: "LGPL-2.1",
+                category: "Popular / Strong Community",
+                permissions: {
+                    commercial: { value: "yes", notes: "" },
+                    modification: { value: "yes", notes: "" },
+                    distribution: { value: "conditional", notes: "Weak copyleft" },
+                    private: { value: "yes", notes: "" }
+                },
+                limitations: {
+                    liability: { value: "yes", notes: "Limited" },
+                    warranty: { value: "no", notes: "No warranty" },
+                    patent: { value: "no", notes: "No explicit patent grant" }
+                },
+                conditions: {
+                    notice: { value: "yes", notes: "Must include copyright notice" },
+                    sameLicense: { value: "conditional", notes: "LGPL for LGPL-licensed library" }
+                }
+            },
+            {
+                name: "GNU AGPL v3.0",
+                spdx: "AGPL-3.0-only",
+                category: "Uncategorized",
+                permissions: {
+                    commercial: { value: "yes", notes: "" },
+                    modification: { value: "yes", notes: "" },
+                    distribution: { value: "conditional", notes: "Network use is distribution" },
+                    private: { value: "yes", notes: "" }
+                },
+                limitations: {
+                    liability: { value: "yes", notes: "Limited" },
+                    warranty: { value: "no", notes: "No warranty" },
+                    patent: { value: "yes", notes: "Explicit patent grant" }
+                },
+                conditions: {
+                    notice: { value: "yes", notes: "Must include copyright notice" },
+                    sameLicense: { value: "yes", notes: "Derivative works must use AGPL v3" }
+                }
+            },
+            {
+                name: "ISC License",
+                spdx: "ISC",
+                category: "Uncategorized",
+                permissions: {
+                    commercial: { value: "yes", notes: "" },
+                    modification: { value: "yes", notes: "" },
+                    distribution: { value: "yes", notes: "" },
+                    private: { value: "yes", notes: "" }
+                },
+                limitations: {
+                    liability: { value: "yes", notes: "Limited" },
+                    warranty: { value: "no", notes: "No warranty" },
+                    patent: { value: "no", notes: "No explicit patent grant" }
+                },
+                conditions: {
+                    notice: { value: "yes", notes: "Must include copyright notice" },
+                    sameLicense: { value: "no", notes: "" }
+                }
+            },
+            {
+                name: "Unlicense",
+                spdx: "Unlicense",
+                category: "Special Purpose",
+                permissions: {
+                    commercial: { value: "yes", notes: "" },
+                    modification: { value: "yes", notes: "" },
+                    distribution: { value: "yes", notes: "" },
+                    private: { value: "yes", notes: "" }
+                },
+                limitations: {
+                    liability: { value: "yes", notes: "Limited" },
+                    warranty: { value: "no", notes: "No warranty" },
+                    patent: { value: "yes", notes: "Public domain dedication" }
+                },
+                conditions: {
+                    notice: { value: "no", notes: "No requirements" },
+                    sameLicense: { value: "no", notes: "" }
+                }
+            },
+            {
+                name: "Creative Commons Zero",
+                spdx: "CC0-1.0",
+                category: "Special Purpose",
+                permissions: {
+                    commercial: { value: "yes", notes: "" },
+                    modification: { value: "yes", notes: "" },
+                    distribution: { value: "yes", notes: "" },
+                    private: { value: "yes", notes: "" }
+                },
+                limitations: {
+                    liability: { value: "yes", notes: "Limited" },
+                    warranty: { value: "no", notes: "No warranty" },
+                    patent: { value: "yes", notes: "Public domain dedication" }
+                },
+                conditions: {
+                    notice: { value: "no", notes: "No requirements" },
+                    sameLicense: { value: "no", notes: "" }
+                }
+            },
+            {
+                name: "BSD 1-Clause",
+                spdx: "BSD-1-Clause",
+                category: "Other/Miscellaneous",
+                permissions: {
+                    commercial: { value: "yes", notes: "" },
+                    modification: { value: "yes", notes: "" },
+                    distribution: { value: "yes", notes: "" },
+                    private: { value: "yes", notes: "" }
+                },
+                limitations: {
+                    liability: { value: "yes", notes: "Limited" },
+                    warranty: { value: "no", notes: "No warranty" },
+                    patent: { value: "no", notes: "No explicit patent grant" }
+                },
+                conditions: {
+                    notice: { value: "yes", notes: "Must include copyright notice" },
+                    sameLicense: { value: "no", notes: "" }
+                }
+            },
+            {
+                name: "Artistic License 2.0",
+                spdx: "Artistic-2.0",
+                category: "Other/Miscellaneous",
+                permissions: {
+                    commercial: { value: "yes", notes: "" },
+                    modification: { value: "yes", notes: "" },
+                    distribution: { value: "conditional", notes: "Specific packaging rules" },
+                    private: { value: "yes", notes: "" }
+                },
+                limitations: {
+                    liability: { value: "yes", notes: "Limited" },
+                    warranty: { value: "no", notes: "No warranty" },
+                    patent: { value: "no", notes: "No explicit patent grant" }
+                },
+                conditions: {
+                    notice: { value: "yes", notes: "Must include copyright notice" },
+                    sameLicense: { value: "conditional", notes: "Modified versions have specific requirements" }
+                }
+            }
         ];
 
         // DOM elements
@@ -454,11 +689,75 @@
                     categoryCell.textContent = '-';
                 }
                 
+                // Permissions cells
+                const commercialCell = document.createElement('td');
+                commercialCell.className = `permission-${license.permissions.commercial.value}`;
+                commercialCell.innerHTML = formatPermission(license.permissions.commercial);
+                
+                const modificationCell = document.createElement('td');
+                modificationCell.className = `permission-${license.permissions.modification.value}`;
+                modificationCell.innerHTML = formatPermission(license.permissions.modification);
+                
+                const distributionCell = document.createElement('td');
+                distributionCell.className = `permission-${license.permissions.distribution.value}`;
+                distributionCell.innerHTML = formatPermission(license.permissions.distribution);
+                
+                const privateCell = document.createElement('td');
+                privateCell.className = `permission-${license.permissions.private.value}`;
+                privateCell.innerHTML = formatPermission(license.permissions.private);
+                
+                // Limitations cells
+                const liabilityCell = document.createElement('td');
+                liabilityCell.className = `permission-${license.limitations.liability.value}`;
+                liabilityCell.innerHTML = formatPermission(license.limitations.liability);
+                
+                const warrantyCell = document.createElement('td');
+                warrantyCell.className = `permission-${license.limitations.warranty.value}`;
+                warrantyCell.innerHTML = formatPermission(license.limitations.warranty);
+                
+                const patentCell = document.createElement('td');
+                patentCell.className = `permission-${license.limitations.patent.value}`;
+                patentCell.innerHTML = formatPermission(license.limitations.patent);
+                
+                // Conditions cells
+                const noticeCell = document.createElement('td');
+                noticeCell.className = `permission-${license.conditions.notice.value}`;
+                noticeCell.innerHTML = formatPermission(license.conditions.notice);
+                
+                const sameLicenseCell = document.createElement('td');
+                sameLicenseCell.className = `permission-${license.conditions.sameLicense.value}`;
+                sameLicenseCell.innerHTML = formatPermission(license.conditions.sameLicense);
+                
+                // Append all cells to row
                 row.appendChild(nameCell);
                 row.appendChild(spdxCell);
                 row.appendChild(categoryCell);
+                row.appendChild(commercialCell);
+                row.appendChild(modificationCell);
+                row.appendChild(distributionCell);
+                row.appendChild(privateCell);
+                row.appendChild(liabilityCell);
+                row.appendChild(warrantyCell);
+                row.appendChild(patentCell);
+                row.appendChild(noticeCell);
+                row.appendChild(sameLicenseCell);
+                
                 tableBody.appendChild(row);
             });
+        }
+
+        // Format permission for display
+        function formatPermission(permission) {
+            let displayText = permission.value.toUpperCase();
+            if (permission.value === 'yes') displayText = '✓';
+            if (permission.value === 'no') displayText = '✗';
+            if (permission.value === 'conditional') displayText = '~';
+            
+            let html = `<div>${displayText}</div>`;
+            if (permission.notes) {
+                html += `<div class="permission-notes">${permission.notes}</div>`;
+            }
+            return html;
         }
 
         // Get CSS class for category
@@ -482,7 +781,15 @@
         function getFilteredAndSortedData() {
             let filtered = licenses.filter(license => {
                 // Category filter
-                if (currentCategory !== 'all' && license.category !== currentCategory) {
+                if (currentCategory === 'Permissive') {
+                    if (!['MIT', 'Apache-2.0', 'BSD-2-Clause', 'BSD-3-Clause', 'ISC', 'BSD-1-Clause'].includes(license.spdx)) {
+                        return false;
+                    }
+                } else if (currentCategory === 'Copyleft') {
+                    if (!['GPL-3.0-only', 'AGPL-3.0-only', 'LGPL-2.1', 'MPL-2.0', 'EPL-2.0'].includes(license.spdx)) {
+                        return false;
+                    }
+                } else if (currentCategory !== 'all' && license.category !== currentCategory) {
                     return false;
                 }
                 
@@ -499,17 +806,41 @@
             
             // Sort data
             filtered.sort((a, b) => {
-                let aValue = a[currentSort.column];
-                let bValue = b[currentSort.column];
+                let aValue, bValue;
+                
+                if (['commercial', 'modification', 'distribution', 'private', 'liability', 'warranty', 'patent', 'notice', 'sameLicense'].includes(currentSort.column)) {
+                    // Sort by permission value
+                    if (currentSort.column in a.permissions) {
+                        aValue = a.permissions[currentSort.column].value;
+                        bValue = b.permissions[currentSort.column].value;
+                    } else if (currentSort.column in a.limitations) {
+                        aValue = a.limitations[currentSort.column].value;
+                        bValue = b.limitations[currentSort.column].value;
+                    } else if (currentSort.column in a.conditions) {
+                        aValue = a.conditions[currentSort.column].value;
+                        bValue = b.conditions[currentSort.column].value;
+                    }
+                } else {
+                    // Sort by regular property
+                    aValue = a[currentSort.column];
+                    bValue = b[currentSort.column];
+                }
                 
                 // Handle empty values
                 if (!aValue) aValue = '';
                 if (!bValue) bValue = '';
                 
+                // Custom sorting for permission values
+                const valueOrder = { 'yes': 1, 'conditional': 2, 'no': 3 };
+                if (valueOrder[aValue] && valueOrder[bValue]) {
+                    aValue = valueOrder[aValue];
+                    bValue = valueOrder[bValue];
+                }
+                
                 if (currentSort.direction === 'asc') {
-                    return aValue.localeCompare(bValue);
+                    return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
                 } else {
-                    return bValue.localeCompare(aValue);
+                    return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
                 }
             });
             
