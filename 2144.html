@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regulatory Requirements - Annex II</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        @page {
+            size: A3 landscape;
+            margin: 5mm;
+        }
+        
+        @media print {
+            body {
+                width: 420mm;
+                height: 297mm;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+            
+            .table-container {
+                overflow: visible !important;
+            }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            padding: 15px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1300px;
+        }
+        
+        th, td {
+            border: 1px solid #e1e1e1;
+            padding: 12px 8px;
+            text-align: center;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        
+        .subject-header {
+            background-color: #34495e;
+        }
+        
+        .category-header {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .section-header {
+            background-color: #2980b9;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .requirement-cell {
+            background-color: #ecf0f1;
+            font-weight: 600;
+            text-align: left;
+        }
+        
+        .regulatory-cell {
+            text-align: left;
+        }
+        
+        .dates-header {
+            background-color: #16a085;
+        }
+        
+        .component-header {
+            background-color: #34495e;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 14px;
+            padding: 20px;
+            border-top: 1px solid #e1e1e1;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .highlight {
+            background-color: #fff9c4 !important;
+        }
+        
+        @media screen and (max-width: 1200px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header w3-container">
+            <h1><i class="fas fa-file-contract"></i> ANNEX II - List of Requirements</h1>
+            <p>Requirements referred to in Article 4(5) and Article 5(3) as well as the dates referred to in Article 16</p>
+        </div>
+        
+        <div class="controls no-print">
+            <div class="search-box">
+                <div class="w3-row">
+                    <div class="w3-col" style="width: 90%;">
+                        <input class="w3-input w3-border" type="text" placeholder="Search requirements..." id="searchInput">
+                    </div>
+                    <div class="w3-col" style="width: 10%;">
+                        <button class="w3-button w3-blue w3-block" id="searchBtn"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="w3-button w3-green" id="printBtn"><i class="fas fa-print"></i> Print</button>
+                <button class="w3-button w3-blue" id="expandAll"><i class="fas fa-expand"></i> Expand All</button>
+            </div>
+        </div>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="subject-header" rowspan="3">Subject</th>
+                        <th class="subject-header" rowspan="3">Regulatory acts</th>
+                        <th class="subject-header" rowspan="3">Additional specific technical provisions</th>
+                        <th class="dates-header" colspan="12">Dates</th>
+                        <th class="component-header" rowspan="3">Component</th>
+                    </tr>
+                    <tr>
+                        <th class="dates-header" colspan="3">M</th>
+                        <th class="dates-header" colspan="3">N</th>
+                        <th class="dates-header" colspan="4">O</th>
+                        <th class="dates-header" colspan="3">S T U</th>
+                    </tr>
+                    <tr>
+                        <th>M₁</th>
+                        <th>M₂</th>
+                        <th>M₃</th>
+                        <th>N₁</th>
+                        <th>N₂</th>
+                        <th>N₃</th>
+                        <th>O₁</th>
+                        <th>O₂</th>
+                        <th>O₃</th>
+                        <th>O₄</th>
+                        <th>S</th>
+                        <th>T</th>
+                        <th>U</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="category-header" colspan="18">Requirements concerning</td>
+                    </tr>
+                    <tr>
+                        <td class="section-header" colspan="18">A RESTRAINT SYSTEMS, CRASH TESTING, FUEL SYSTEM INTEGRITY AND HIGH VOLTAGE ELECTRICAL SAFETY</td>
+                    </tr>
+                    <tr>
+                        <td class="requirement-cell">A1 Interior fittings</td>
+                        <td class="regulatory-cell">UN Regulation No 21</td>
+                        <td></td>
+                        <td>A</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="requirement-cell">A2 Seat strength</td>
+                        <td class="regulatory-cell">UN Regulation No 17</td>
+                        <td>ECE/TRANS/WP.29/2020/85</td>
+                        <td></td>
+                        <td>B</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Seat structure</td>
+                    </tr>
+                    <tr>
+                        <td class="requirement-cell">A3 Head restraints</td>
+                        <td class="regulatory-cell">UN Regulation No 25</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>C</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Head restraint</td>
+                    </tr>
+                    <tr>
+                        <td class="section-header" colspan="18">B BRAKING SYSTEMS AND STEERING SYSTEMS</td>
+                    </tr>
+                    <tr>
+                        <td class="requirement-cell">B1 Braking system</td>
+                        <td class="regulatory-cell">UN Regulation No 13-H</td>
+                        <td>Amended by ECE/TRANS/WP.29/2021/75</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>D</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Brake control unit</td>
+                    </tr>
+                    <!-- Additional rows would follow the same pattern -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="footer w3-container">
+            <p><i class="fas fa-info-circle"></i> This table shows the requirements referred to in Article 4(5) and Article 5(3) as well as the dates referred to in Article 16.</p>
+            <p class="w3-small">Document ID: REG-ANNEX-II-2024 | Last updated: January 2024</p>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Search functionality
+            $('#searchBtn').click(function() {
+                const searchTerm = $('#searchInput').val().toLowerCase();
+                
+                $('tbody tr').each(function() {
+                    const rowText = $(this).text().toLowerCase();
+                    if (rowText.includes(searchTerm)) {
+                        $(this).show();
+                        $(this).addClass('highlight');
+                    } else {
+                        $(this).hide();
+                        $(this).removeClass('highlight');
+                    }
+                });
+                
+                // Show section headers when their content is shown
+                $('.section-header').each(function() {
+                    const section = $(this);
+                    let hasVisibleRows = false;
+                    
+                    section.nextUntil('.section-header, .category-header').each(function() {
+                        if ($(this).is(':visible')) {
+                            hasVisibleRows = true;
+                            return false; // break the loop
+                        }
+                    });
+                    
+                    section.toggle(hasVisibleRows);
+                });
+            });
+            
+            // Clear search when input is empty
+            $('#searchInput').on('input', function() {
+                if ($(this).val() === '') {
+                    $('tbody tr').show();
+                    $('tbody tr').removeClass('highlight');
+                }
+            });
+            
+            // Print functionality
+            $('#printBtn').click(function() {
+                window.print();
+            });
+            
+            // Expand all rows
+            $('#expandAll').click(function() {
+                $('tbody tr').show();
+                $('tbody tr').removeClass('highlight');
+                $('#searchInput').val('');
+            });
+        });
+    </script>
+</body>
+</html>
