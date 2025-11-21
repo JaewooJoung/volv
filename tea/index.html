@@ -89,6 +89,54 @@
             padding: 10px;
             border: 1px solid #ccc;
         }
+        
+        /* Fermentation Chart Styles */
+        .fermentation-chart {
+            margin-top: 40px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+        .fermentation-chart h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .fermentation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        .fermentation-table th, .fermentation-table td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: center;
+        }
+        .fermentation-table th {
+            background-color: #e0e0e0;
+            font-weight: bold;
+        }
+        .fermentation-table td {
+            background-color: white;
+        }
+        .fermentation-level {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .fermentation-bar {
+            height: 20px;
+            background: linear-gradient(to right, #4CAF50, #FFC107, #FF5722);
+            border-radius: 10px;
+            flex-grow: 1;
+            margin: 0 10px;
+        }
+        .fermentation-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
@@ -197,6 +245,71 @@
                 <div class="famous-tea-item">祁门红茶 (Qímén Hóngchá)</div>
             </div>
             <p>The first two characters represent the tea production area name, followed by the tea name.</p>
+        </div>
+        
+        <!-- Fermentation Chart Section -->
+        <div class="fermentation-chart">
+            <h2>Chinese Tea Fermentation Levels</h2>
+            <table class="fermentation-table">
+                <tr>
+                    <th>Tea Type</th>
+                    <th>Chinese Name</th>
+                    <th>Fermentation Level</th>
+                    <th>English Name</th>
+                </tr>
+                <tr>
+                    <td>綠 (Lǜ)</td>
+                    <td>绿茶</td>
+                    <td>No Fermentation</td>
+                    <td>Green Tea</td>
+                </tr>
+                <tr>
+                    <td>白 (Bái)</td>
+                    <td>白茶</td>
+                    <td>Light Fermentation</td>
+                    <td>White Tea</td>
+                </tr>
+                <tr>
+                    <td>黃 (Huáng)</td>
+                    <td>黄茶</td>
+                    <td>Slight Fermentation</td>
+                    <td>Yellow Tea</td>
+                </tr>
+                <tr>
+                    <td>青 (Qīng)</td>
+                    <td>乌龙茶</td>
+                    <td>Semi-Fermentation</td>
+                    <td>Oolong Tea</td>
+                </tr>
+                <tr>
+                    <td>紅 (Hóng)</td>
+                    <td>红茶</td>
+                    <td>Full Fermentation</td>
+                    <td>Red Tea</td>
+                </tr>
+                <tr>
+                    <td>黑 (Hēi)</td>
+                    <td>黑茶</td>
+                    <td>Post-Fermentation</td>
+                    <td>Dark Tea</td>
+                </tr>
+            </table>
+            
+            <div class="fermentation-level">
+                <span>No Fermentation</span>
+                <div class="fermentation-bar"></div>
+                <span>Full Fermentation</span>
+            </div>
+            <div class="fermentation-labels">
+                <span>Green Tea</span>
+                <span>White Tea</span>
+                <span>Yellow Tea</span>
+                <span>Oolong Tea</span>
+                <span>Red Tea</span>
+                <span>Dark Tea</span>
+            </div>
+            
+            <p><strong>Note:</strong> In Chinese classification, "Red Tea" (红茶) is what Western markets call "Black Tea". Chinese "Black Tea" (黑茶) refers to post-fermented teas like Pu'er.</p>
         </div>
     </div>
 </body>
