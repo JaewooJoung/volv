@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chinese Tea Classification</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        @page {
+            size: A3 landscape;
+            margin: 5mm;
+        }
+        
+        @media print {
+            body {
+                width: 420mm;
+                height: 297mm;
+            }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Raleway', Arial, sans-serif;
+            background-color: white;
+            color: black;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        .tea-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .tea-category {
+            border: 1px solid #ccc;
+            padding: 20px;
+            background-color: white;
+        }
+        .tea-category h2 {
+            margin-top: 0;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+            font-weight: bold;
+        }
+        .tea-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .tea-list li {
+            margin-bottom: 8px;
+            padding: 5px 0;
+        }
+        .famous-teas {
+            margin-top: 40px;
+        }
+        .famous-teas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        .famous-tea-item {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Chinese Tea Classification</h1>
+        
+        <div class="tea-grid">
+            <div class="tea-category">
+                <h2>Green Tea (绿茶 - Lǜchá)</h2>
+                <p>The most common type of tea, made without fermentation. There are steaming and roasting methods. Produced throughout China, especially famous in Zhejiang and Sichuan.</p>
+                <ul class="tea-list">
+                    <li>碧螺春 (Bìluóchūn)</li>
+                    <li>毛峰 (Máofēng)</li>
+                    <li>瓜片 (Guāpiàn)</li>
+                    <li>银针 (Yínzhēn)</li>
+                    <li>毛尖 (Máojiān)</li>
+                    <li>云雾 (Yúnwù)</li>
+                </ul>
+            </div>
+            
+            <div class="tea-category">
+                <h2>Black Tea (红茶 - Hóngchá)</h2>
+                <p>Unlike green tea, it undergoes fermentation process, resulting in slightly reddish tea liquor.</p>
+                <ul class="tea-list">
+                    <li>祁红 (Qíhóng) - Anhui</li>
+                    <li>镇红 (Zhènhóng) - Yunnan</li>
+                    <li>宣红 (Xuānhóng) - Hubei</li>
+                    <li>川红 (Chuānhóng) - Sichuan</li>
+                </ul>
+            </div>
+            
+            <div class="tea-category">
+                <h2>Oolong Tea (乌龙茶 - Wūlóngchá)</h2>
+                <p>Also known as blue tea. It undergoes partial fermentation where natural fermentation is stopped midway with artificial heat to dry tea leaves.</p>
+                <ul class="tea-list">
+                    <li>铁观音 (Tiěguānyīn)</li>
+                    <li>白毛猴 (Báimáohóu)</li>
+                    <li>凤凰水仙 (Fènghuáng Shuǐxiān)</li>
+                    <li>黄金桂 (Huángjīnguì)</li>
+                </ul>
+            </div>
+            
+            <div class="tea-category">
+                <h2>Flower Tea (花茶 - Huāchá)</h2>
+                <p>Typically made by adding flower fragrance to green tea. Especially popular among Beijing people.</p>
+                <ul class="tea-list">
+                    <li>茉莉花茶 (Mòlì Huāchá)</li>
+                    <li>玫瑰花茶 (Méiguī Huāchá)</li>
+                    <li>白兰花茶 (Báilán Huāchá)</li>
+                    <li>柚花茶 (Yòu Huāchá)</li>
+                    <li>金银花茶 (Jīnyín Huāchá)</li>
+                </ul>
+            </div>
+            
+            <div class="tea-category">
+                <h2>White Tea (白茶 - Báichá)</h2>
+                <p>Dried using natural sunlight without artificial heat, with fermentation degree generally below 10%.</p>
+                <ul class="tea-list">
+                    <li>白牡丹 (Báimǔdān)</li>
+                    <li>贡眉 (Gòngméi)</li>
+                    <li>银针白毫 (Yínzhēn Báiháo)</li>
+                </ul>
+            </div>
+            
+            <div class="tea-category">
+                <h2>Yellow Tea (黄茶 - Huángchá)</h2>
+                <p>Tea with dark yellow color like barley tea, with fermentation degree between green tea and oolong tea.</p>
+                <ul class="tea-list">
+                    <li>北港毛尖 (Běigǎng Máojiān)</li>
+                    <li>广东大叶青 (Guǎngdōng Dàyèqīng)</li>
+                    <li>海马宫茶 (Hǎimǎ Gōng Chá)</li>
+                    <li>君山银针 (Jūnshān Yínzhēn)</li>
+                </ul>
+            </div>
+            
+            <div class="tea-category">
+                <h2>Dark Tea (黑茶 - Hēichá)</h2>
+                <p>Tea fermented before tea leaves completely dry. Particularly famous is Yunnan's Pu'er tea.</p>
+                <ul class="tea-list">
+                    <li>普洱茶 (Pǔ'ěr Chá)</li>
+                    <li>普洱紧压茶 (Pǔ'ěr Jǐnyā Chá)</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="famous-teas">
+            <h2>China's Top 10 Famous Teas (中国十大名茶)</h2>
+            <p>If you're unsure which tea to buy, choosing one of China's top 10 famous teas is a good option.</p>
+            <div class="famous-teas-grid">
+                <div class="famous-tea-item">洞庭碧螺春 (Dòngtíng Bìluóchūn)</div>
+                <div class="famous-tea-item">安溪铁观音 (Ānxī Tiěguānyīn)</div>
+                <div class="famous-tea-item">武夷大红袍 (Wǔyí Dàhóngpáo)</div>
+                <div class="famous-tea-item">冻顶乌龙 (Dòngdǐng Wūlóng)</div>
+                <div class="famous-tea-item">云南普洱茶 (Yúnnán Pǔ'ěr Chá)</div>
+                <div class="famous-tea-item">西湖龙井 (Xīhú Lóngjǐng)</div>
+                <div class="famous-tea-item">黄山毛峰 (Huángshān Máofēng)</div>
+                <div class="famous-tea-item">君山银针 (Jūnshān Yínzhēn)</div>
+                <div class="famous-tea-item">六安瓜片 (Lù'ān Guāpiàn)</div>
+                <div class="famous-tea-item">祁门红茶 (Qímén Hóngchá)</div>
+            </div>
+            <p>The first two characters represent the tea production area name, followed by the tea name.</p>
+        </div>
+    </div>
+</body>
+</html>
