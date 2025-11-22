@@ -126,6 +126,40 @@
         .fermentation-table td {
             background-color: white;
         }
+        .tea-type-character {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .tea-type-green {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .tea-type-white {
+            background-color: #000000;
+            color: white;
+        }
+        .tea-type-yellow {
+            background-color: #FF9800;
+            color: white;
+        }
+        .tea-type-blue {
+            background-color: #2196F3;
+            color: white;
+        }
+        .tea-type-red {
+            background-color: #F44336;
+            color: white;
+        }
+        .tea-type-black {
+            background-color: #795548;
+            color: white;
+        }
         .fermentation-level {
             display: flex;
             align-items: center;
@@ -134,7 +168,7 @@
         }
         .fermentation-bar {
             height: 20px;
-            background: linear-gradient(to right, #4CAF50, #FFC107, #FF5722);
+            background: linear-gradient(to right, #4CAF50, #000000, #FF9800, #2196F3, #F44336, #795548);
             border-radius: 10px;
             flex-grow: 1;
             margin: 0 10px;
@@ -322,37 +356,37 @@
                     <th>English Name</th>
                 </tr>
                 <tr>
-                    <td>綠 (Lǜ)</td>
+                    <td><span class="tea-type-character tea-type-green">綠</span></td>
                     <td>绿茶</td>
                     <td>No Fermentation</td>
                     <td>Green Tea</td>
                 </tr>
                 <tr>
-                    <td>白 (Bái)</td>
+                    <td><span class="tea-type-character tea-type-white">白</span></td>
                     <td>白茶</td>
                     <td>Light Fermentation</td>
                     <td>White Tea</td>
                 </tr>
                 <tr>
-                    <td>黃 (Huáng)</td>
+                    <td><span class="tea-type-character tea-type-yellow">黃</span></td>
                     <td>黄茶</td>
                     <td>Slight Fermentation</td>
                     <td>Yellow Tea</td>
                 </tr>
                 <tr>
-                    <td>青 (Qīng)</td>
+                    <td><span class="tea-type-character tea-type-blue">青</span></td>
                     <td>乌龙茶</td>
                     <td>Semi-Fermentation</td>
                     <td>Oolong Tea</td>
                 </tr>
                 <tr>
-                    <td>紅 (Hóng)</td>
+                    <td><span class="tea-type-character tea-type-red">紅</span></td>
                     <td>红茶</td>
                     <td>Full Fermentation</td>
                     <td>Red Tea</td>
                 </tr>
                 <tr>
-                    <td>黑 (Hēi)</td>
+                    <td><span class="tea-type-character tea-type-black">黑</span></td>
                     <td>黑茶</td>
                     <td>Post-Fermentation</td>
                     <td>Dark Tea</td>
