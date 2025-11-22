@@ -61,12 +61,11 @@
             border-bottom: 1px solid #ccc;
             padding-bottom: 5px;
             font-weight: bold;
-            font-size: 12px; /* Add this line */
-
+            font-size: 12px;
         }
         .tea-image {
             width: 100%;
-            height: 180px; /* Reduced from 200px */
+            height: 180px;
             object-fit: cover;
             margin-bottom: 15px;
             border-radius: 5px;
@@ -78,6 +77,13 @@
         .tea-list li {
             margin-bottom: 8px;
             padding: 5px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .tea-explanation {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 3px;
+            font-style: italic;
         }
         .famous-teas {
             margin-top: 40px;
@@ -151,12 +157,24 @@
                 <img src="green.jpg" alt="Green Tea" class="tea-image">
                 <p>The most common type of tea, made without fermentation. There are steaming and roasting methods. Produced throughout China, especially famous in Zhejiang and Sichuan.</p>
                 <ul class="tea-list">
-                    <li>碧螺春 (Bìluóchūn)</li>
-                    <li>毛峰 (Máofēng)</li>
-                    <li>瓜片 (Guāpiàn)</li>
-                    <li>银针 (Yínzhēn)</li>
-                    <li>毛尖 (Máojiān)</li>
-                    <li>云雾 (Yúnwù)</li>
+                    <li>碧螺春 (Bìluóchūn)
+                        <div class="tea-explanation">"Green Snail Spring" - Known for its tight spiral shape and fruity aroma from Jiangsu province.</div>
+                    </li>
+                    <li>毛峰 (Máofēng)
+                        <div class="tea-explanation">"Fur Peak" - Named for its fuzzy white tea buds, a famous variety from Huangshan.</div>
+                    </li>
+                    <li>瓜片 (Guāpiàn)
+                        <div class="tea-explanation">"Melon Seed" - Unique flat, seed-shaped leaves without buds or stems from Anhui.</div>
+                    </li>
+                    <li>银针 (Yínzhēn)
+                        <div class="tea-explanation">"Silver Needle" - Fine, needle-shaped white buds that produce a pale, delicate liquor.</div>
+                    </li>
+                    <li>毛尖 (Máojiān)
+                        <div class="tea-explanation">"Fur Tip" - Small, delicate tea with fuzzy buds, known for its sweet aftertaste.</div>
+                    </li>
+                    <li>云雾 (Yúnwù)
+                        <div class="tea-explanation">"Cloud and Mist" - Grown at high altitudes in misty mountains, known for its subtle flavor.</div>
+                    </li>
                 </ul>
             </div>
             
