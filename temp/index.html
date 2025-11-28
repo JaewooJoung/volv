@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Volvo Supplier Dashboard</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        @page {
+            size: A3 landscape;
+            margin: 5mm;
+        }
+        
+        @media print {
+            body {
+                width: 420mm;
+                height: 297mm;
+            }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Raleway', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 8px;
+        }
+        
+        .header-bar {
+            background: #2c3e50;
+            color: white;
+            padding: 12px 20px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-bar h1 {
+            font-size: 1.8em;
+            font-weight: 600;
+        }
+        
+        .header-bar p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        /* KPI Cards Container */
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 12px;
+            padding: 0 2px;
+        }
+        
+        .kpi-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 2px solid #e0e0e0;
+        }
+        
+        .kpi-header {
+            background: #2c3e50;
+            color: white;
+            padding: 12px;
+            margin: -20px -20px 20px -20px;
+            border-radius: 6px 6px 0 0;
+            font-size: 1.2em;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .kpi-value {
+            font-size: 4em;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #2c3e50;
+        }
+        
+        .kpi-value.red {
+            color: #e74c3c;
+        }
+        
+        .kpi-value.black {
+            color: #2c3e50;
+        }
+        
+        .kpi-trend {
+            font-size: 4em;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        
+        .kpi-trend.down {
+            color: #27ae60;
+        }
+        
+        .kpi-trend.up {
+            color: #e74c3c;
+        }
+        
+        .kpi-trend.neutral {
+            color: #95a5a6;
+        }
+        
+        .kpi-label {
+            font-size: 1.1em;
+            color: #555;
+            margin-top: 15px;
+        }
+        
+        /* Supplier Cards */
+        .suppliers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 10px;
+            padding: 0 2px;
+        }
+        
+        .supplier-card {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .supplier-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+        
+        .supplier-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .supplier-logo {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .supplier-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .supplier-card h3 {
+            color: #2c3e50;
+            font-size: 1.05em;
+            margin-bottom: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: 600;
+        }
+        
+        .supplier-card h3 a {
+            color: #2c3e50;
+            text-decoration: none;
+        }
+        
+        .supplier-card h3 a:hover {
+            color: #667eea;
+        }
+        
+        .supplier-id {
+            color: #7f8c8d;
+            font-size: 0.85em;
+        }
+        
+        .supplier-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .metric {
+            background: #f8f9fa;
+            padding: 8px;
+            border-radius: 6px;
+            text-align: center;
+            border-left: 3px solid #95a5a6;
+        }
+        
+        .metric-label {
+            font-size: 0.8em;
+            color: #7f8c8d;
+            margin-bottom: 3px;
+            font-weight: 600;
+        }
+        
+        .metric-value {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .metric-good {
+            background: #d5f4e6;
+            border-left-color: #27ae60;
+        }
+        
+        .metric-bad {
+            background: #fadbd8;
+            border-left-color: #e74c3c;
+        }
+        
+        .metric-neutral {
+            background: #f8f9fa;
+            border-left-color: #95a5a6;
+        }
+        
+        .supplier-status {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+        
+        .badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .badge-success {
+            background: #d5f4e6;
+            color: #27ae60;
+            border: 1px solid #27ae60;
+        }
+        
+        .badge-danger {
+            background: #fadbd8;
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+        
+        .badge-secondary {
+            background: #ecf0f1;
+            color: #7f8c8d;
+            border: 1px solid #bdc3c7;
+        }
+        
+        .supplier-sqe {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        
+        .sqe-badge {
+            background: #e8f4f8;
+            color: #3498db;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 0.75em;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+            border: 1px solid #3498db;
+        }
+        
+        .footer {
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 12px;
+            text-align: center;
+            color: #7f8c8d;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            font-size: 0.85em;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .supplier-card:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="w3-container">
+        <!-- Header -->
+        <div class="header-bar">
+            <div>
+                <h1>🚛 Volvo Supplier ☀️Q△Prism🏳️‍🌈 Dashboard <i class="fas fa-truck"></i></h1>
+                <p>For Managers to view all suppliers</p>
+            </div>
+        </div>
+        
+        <!-- KPI Cards -->
+        <div class="kpi-container">
+            <!-- PPM >50 -->
+            <div class="kpi-card">
+                <div class="kpi-header">PPM >50</div>
+                <div class="kpi-value $PPM_COLOR_CLASS">$PPM_OVER_50</div>
+                <div class="kpi-label">Out of $TOTAL_SUPPLIERS projects</div>
+            </div>
+            
+            <!-- QPM >50 -->
+            <div class="kpi-card">
+                <div class="kpi-header">QPM >50</div>
+                <div class="kpi-value black">$QPM_OVER_50</div>
+                <div class="kpi-label">Out of $TOTAL_SUPPLIERS projects</div>
+            </div>
+            
+            <!-- Trend -->
+            <div class="kpi-card">
+                <div class="kpi-header">Trend</div>
+                <div class="kpi-trend $QPM_TREND_CLASS">$QPM_TREND_ICON</div>
+                <div class="kpi-label">$QPM_TREND_TEXT</div>
+            </div>
+        </div>
+        
+        <!-- Supplier Cards Grid -->
+        <div class="suppliers-grid">
+            $SUPPLIER_CARDS
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p><i class="fas fa-clock"></i> Generated on $GENERATED_DATE | <i class="fas fa-building"></i> Volvo Group Purchasing | <i class="fas fa-chart-line"></i> SQE Dashboard</p>
+        </div>
+    </div>
+</body>
+</html>
+
+                
