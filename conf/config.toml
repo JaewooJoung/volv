@@ -1,0 +1,18 @@
+[smtp]
+server = "mailgot.it.volvo.com"
+port = 25
+use_ssl = false
+
+[imap]
+server = "outlook.office365.com"
+port = 993
+
+[credentials]
+email = ""
+password = ""
+app_password = ""
+
+[sender]
+display_name = "Risk Management and Proactivity(NO-REPLY)"
+display_email = "no-reply@qprism.volvo.com"
+alternative_email = "81147176.groups.volvo.com@emea.teams.ms"
