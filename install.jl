@@ -12,8 +12,8 @@ Pkg.add("TOML")
 # Install Sendmail
 Pkg.add(url="https://github.com/JaewooJoung/Sendmail.jl")
 
-# Try to install Qprism in development mode
-Pkg.develop(url="https://github.com/JaewooJoung/Qprism.jl")
+# install Qprism
+Pkg.add(url="https://github.com/JaewooJoung/Qprism.jl")
 
 # Force resolve dependencies
 Pkg.resolve()
