@@ -1,6 +1,5 @@
 [[suppliers]]
-#parma_codes = [32731,33568...] <-- example 
-parma_codes = []
-[[myemail]]
-#myemail="jaewoo.joung@consultant.volvo.com" <-- example 
-myemail=""
+parma_codes = [32731, 33568]
+
+[myemail]
+myemail = "jaewoo.joung@consultant.volvo.com"
